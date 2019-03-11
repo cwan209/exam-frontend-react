@@ -15,7 +15,9 @@ import Paper from '@material-ui/core/Paper';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Checkbox from '@material-ui/core/Checkbox';
+import Snackbar from '@material-ui/core/Snackbar';
 import {signup} from "../api/auth";
+import CloseIcon from '@material-ui/icons/Close';
 
 class LoginPage extends React.Component {
   state = {
@@ -23,7 +25,23 @@ class LoginPage extends React.Component {
     password: '',
     showPassword: false,
     loading: false,
+    open: false,
+    errorMessage: ''
   };
+
+
+  handleClick = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ open: false });
+  };
+
 
   handleChange = prop => event => {
     console.log("handleChange", prop);
@@ -46,6 +64,11 @@ class LoginPage extends React.Component {
           console.log('success', response.user);
         } else {
           console.log('fail', response.error);
+          this.setState({
+            open: true,
+            errorMessage: response.error
+          });
+
         }
       }
     );
@@ -53,7 +76,7 @@ class LoginPage extends React.Component {
 
   render() {
     const {classes} = this.props;
-    const {loading} = this.state;
+    const {loading, open, errorMessage} = this.state;
 
     return (
       <form className={classes.container} noValidate autoComplete="off">
@@ -103,6 +126,25 @@ class LoginPage extends React.Component {
             </Button>
             {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
           </div>
+
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            open={open}
+            autoHideDuration={6000}
+            onClose={this.handleClose}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">{errorMessage}</span>}
+            action={[
+              <Button key="okay" color="secondary" size="small" onClick={this.handleClose}>
+                Okay
+              </Button>,
+            ]}
+          />
         </Paper>
 
       </form>
@@ -155,7 +197,7 @@ const styles = theme => ({
   wrapper: {
     margin: theme.spacing.unit,
     position: 'relative',
-  },
+  }
 });
 
 
