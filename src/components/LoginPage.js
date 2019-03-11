@@ -14,6 +14,7 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import { signup } from "../api/auth";
 
 const styles = theme => ({
   container: {
@@ -55,11 +56,28 @@ class LoginPage extends React.Component {
   };
 
   handleChange = prop => event => {
+    console.log("handleChange", prop);
     this.setState({ [prop]: event.target.value });
   };
 
   handleClickShowPassword = () => {
     this.setState(state => ({ showPassword: !state.showPassword }));
+  };
+
+  handleSubmit = event => {
+    const {email, password} = this.state;
+    event.preventDefault();
+
+    signup(email, password).then(
+      result => {
+        if (result.success) {
+          alert(result.response);
+        }
+
+      }
+
+    );
+
   };
 
   render() {
@@ -105,6 +123,7 @@ class LoginPage extends React.Component {
             fullWidth
             variant="contained"
             color="primary"
+            onClick={this.handleSubmit}
             className={classes.submit}
           >
             Sign in
