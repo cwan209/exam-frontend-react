@@ -15,7 +15,6 @@ import Paper from '@material-ui/core/Paper';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Checkbox from '@material-ui/core/Checkbox';
-import green from '@material-ui/core/colors/green';
 import {signup} from "../api/auth";
 
 class LoginPage extends React.Component {
@@ -50,7 +49,6 @@ class LoginPage extends React.Component {
         }
       }
     );
-
   };
 
   render() {
@@ -147,7 +145,7 @@ const styles = theme => ({
     width: 200,
   },
   buttonProgress: {
-    color: '#3f51b5',
+    color: theme.palette.primary,
     position: 'absolute',
     top: '50%',
     left: '50%',
