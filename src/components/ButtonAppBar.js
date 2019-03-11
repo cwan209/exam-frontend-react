@@ -39,7 +39,10 @@ function ButtonAppBar(props) {
             <Link to={'/'} className={classes.link}>Home</Link>
           </Typography>
           <Button color="inherit">
-            <Link className={classes.link} to={'/login'}>Login</Link>
+            <Link className={classes.link} to={'/login'}>Log In</Link>
+          </Button>
+          <Button color="inherit">
+            <Link className={classes.link} to={'/signup'}>Sign Up</Link>
           </Button>
         </Toolbar>
       </AppBar>
