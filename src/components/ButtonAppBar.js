@@ -36,7 +36,7 @@ function ButtonAppBar(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" color="inherit" className={classes.grow}>
-            <Link to={'/'} className={classes.link}>Home</Link>
+            <Link to={'/'} className={classes.link}>Examify</Link>
           </Typography>
           <Button color="inherit">
             <Link className={classes.link} to={'/login'}>Log In</Link>

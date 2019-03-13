@@ -22,16 +22,13 @@ class Signup extends React.Component {
   state = {
     email: '',
     password: '',
+    name: '',
     showPassword: false,
     loading: false,
     open: false,
     errorMessage: ''
   };
 
-
-  handleClick = () => {
-    this.setState({ open: true });
-  };
 
   handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -52,11 +49,11 @@ class Signup extends React.Component {
   };
 
   handleSubmit = event => {
-    const {email, password} = this.state;
+    const {email, password, name} = this.state;
     event.preventDefault();
     this.setState({loading: true});
 
-    signup(email, password).then(
+    signup(email, password, name).then(
       response => {
         this.setState({loading: false});
         if (response.success) {
@@ -108,9 +105,13 @@ class Signup extends React.Component {
             />
           </FormControl>
 
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary"/>}
-            label="Remember me"
+          <TextField
+            id="standard-name"
+            label="Name"
+            className={classes.textField}
+            value={this.state.name}
+            onChange={this.handleChange('name')}
+            margin="normal"
           />
 
           <div className={classes.wrapper}>
@@ -137,7 +138,9 @@ class Signup extends React.Component {
             ContentProps={{
               'aria-describedby': 'message-id',
             }}
-            message={<span id="message-id">{errorMessage}</span>}
+            message={
+              <span id="message-id">{errorMessage}</span>
+            }
             action={[
               <Button key="okay" color="secondary" size="small" onClick={this.handleClose}>
                 Okay
@@ -196,6 +199,7 @@ const styles = theme => ({
   wrapper: {
     margin: theme.spacing.unit,
     position: 'relative',
+    marginTop: 30
   }
 });
 
