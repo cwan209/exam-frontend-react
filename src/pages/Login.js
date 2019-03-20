@@ -12,13 +12,12 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Checkbox from '@material-ui/core/Checkbox';
 import Snackbar from '@material-ui/core/Snackbar';
-import {signup} from "../api/auth";
+import {login} from "../api/auth";
+import { Redirect } from "react-router-dom";
 
-class Signup extends React.Component {
+class Login extends React.Component {
   state = {
     email: '',
     password: '',
@@ -26,7 +25,8 @@ class Signup extends React.Component {
     showPassword: false,
     loading: false,
     open: false,
-    errorMessage: ''
+    errorMessage: '',
+    redirectToReferrer: false
   };
 
   handleClose = (event, reason) => {
@@ -48,22 +48,22 @@ class Signup extends React.Component {
   };
 
   handleSubmit = event => {
-    const {email, password, name} = this.state;
+    const {email, password} = this.state;
     event.preventDefault();
     this.setState({loading: true});
 
-    signup(email, password, name).then(
+    login(email, password).then(
       response => {
         this.setState({loading: false});
-        if (response.success) {
-          console.log('success', response.user);
+        if (response._id) {
+          console.log('success', response);
+          this.setState({ redirectToReferrer: true });
         } else {
-          console.log('fail', response.error);
+          console.log('fail', response);
           this.setState({
             open: true,
-            errorMessage: response.error
+            errorMessage: 'Login Failed'
           });
-
         }
       }
     );
@@ -71,11 +71,16 @@ class Signup extends React.Component {
 
   render() {
     const {classes} = this.props;
-    const {loading, open, errorMessage} = this.state;
+    const {loading, open, errorMessage, redirectToReferrer} = this.state;
+    let { from } = this.props.location.state || { from: { pathname: "/" } };
+
+    if (redirectToReferrer) return <Redirect to={from} />;
 
     return (
       <form className={classes.container} noValidate autoComplete="off">
         <Paper className={classes.paper}>
+
+          {/*email*/}
           <TextField
             id="standard-name"
             label="Email"
@@ -84,6 +89,8 @@ class Signup extends React.Component {
             onChange={this.handleChange('email')}
             margin="normal"
           />
+
+          {/*password*/}
           <FormControl className={classNames(classes.margin, classes.textField)}>
             <InputLabel htmlFor="adornment-password">Password</InputLabel>
             <Input
@@ -104,15 +111,6 @@ class Signup extends React.Component {
             />
           </FormControl>
 
-          <TextField
-            id="standard-name"
-            label="Name"
-            className={classes.textField}
-            value={this.state.name}
-            onChange={this.handleChange('name')}
-            margin="normal"
-          />
-
           <div className={classes.wrapper}>
             <Button
               type="submit"
@@ -121,7 +119,7 @@ class Signup extends React.Component {
               onClick={this.handleSubmit}
               disabled={loading}
             >
-              Sign Up
+              Log In
             </Button>
             {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
           </div>
@@ -153,7 +151,7 @@ class Signup extends React.Component {
   }
 }
 
-Signup.propTypes = {
+Login.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
@@ -203,6 +201,6 @@ const styles = theme => ({
 });
 
 
-export default withStyles(styles)(Signup);
+export default withStyles(styles)(Login);
 
 
