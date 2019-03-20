@@ -8,13 +8,52 @@ import {MuiThemeProvider} from '@material-ui/core/styles';
 import {theme} from './settings/theme';
 import Verification from "./pages/Verification";
 
-class App extends Component {
+class App extends React.Component {
+
+  state = {
+    user: null,
+    isLoggedIn: false
+  };
+
+  componentDidMount() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log('localStorage', user)
+    if (user) {
+      this.setState({
+        user: user,
+        isLoggedIn: true
+      })
+    }
+
+  }
+
+  login = user => {
+    this.setState({
+      isLoggedIn: true,
+      user: user
+    });
+  };
+
+  logOut = () => {
+    localStorage.removeItem('user');
+    this.setState({
+      isLoggedIn: false,
+      user: null
+    });
+  };
+
   render() {
+    const {isLoggedIn, user} = this.state;
+    console.log(isLoggedIn, user);
     return (
       <div className="App">
-        <MuiThemeProvider theme={theme}>
-          <Header/>
-          <Route path={"/login"} component={Login}/>
+        <MuiThemeProvider theme={theme} >
+          <Header isLoggedIn={isLoggedIn} logOut={this.logOut}/>
+          <Route path={"/login"} render={(props) => (
+              <Login {...props}
+                 login={this.login}
+              />
+          )}/>
           <Route path={"/signup"} component={Signup}/>
           <Route path={"/verify"} component={Verification}/>
 

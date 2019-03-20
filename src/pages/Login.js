@@ -56,7 +56,8 @@ class Login extends React.Component {
       response => {
         this.setState({loading: false});
         if (response._id) {
-          console.log('success', response);
+          localStorage.setItem('user', JSON.stringify(response));
+          this.props.login(response);
           this.setState({ redirectToReferrer: true });
         } else {
           console.log('fail', response);

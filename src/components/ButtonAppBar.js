@@ -27,7 +27,7 @@ const styles = {
 };
 
 function ButtonAppBar(props) {
-  const { classes } = props;
+  const { classes, isLoggedIn, logOut } = props;
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -38,12 +38,18 @@ function ButtonAppBar(props) {
           <Typography variant="h6" color="inherit" className={classes.grow}>
             <Link to={'/'} className={classes.link}>Examify</Link>
           </Typography>
-          <Button color="inherit">
-            <Link className={classes.link} to={'/login'}>Log In</Link>
-          </Button>
-          <Button color="inherit">
-            <Link className={classes.link} to={'/signup'}>Sign Up</Link>
-          </Button>
+          {
+            isLoggedIn ?
+              <Button onClick={logOut} color="inherit">Log out</Button> :
+              <div>
+                <Button color="inherit">
+                  <Link className={classes.link} to={'/login'}>Log In</Link>
+                </Button>
+                <Button color="inherit">
+                  <Link className={classes.link} to={'/signup'}>Sign Up</Link>
+                </Button>
+              </div>
+          }
         </Toolbar>
       </AppBar>
     </div>
