@@ -1,7 +1,7 @@
 import * as config from '../config';
 
-export const signup = (email, password, name) => {
-  const url = `${config.apiHost}v1/signup`;
+export const signup = (email, password, username, roles) => {
+  const url = `${config.apiHost}v1/auth/signup`;
 
   return fetch(url,
     {
@@ -12,7 +12,8 @@ export const signup = (email, password, name) => {
       body: JSON.stringify({
         email: email,
         password: password,
-        name: name
+        username: username,
+        roles: roles
       })
     })
     .then(response => response.json())
@@ -54,7 +55,7 @@ export const verifyAccount = (email, verificationToken) => {
 };
 
 export const login = (email, password, name) => {
-  const url = `${config.apiHost}v1/login`;
+  const url = `${config.apiHost}v1/auth/signin`;
 
   return fetch(url,
     {
@@ -65,7 +66,6 @@ export const login = (email, password, name) => {
       body: JSON.stringify({
         email: email,
         password: password,
-        name: name
       })
     })
     .then(response => response.json())

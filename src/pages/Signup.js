@@ -17,6 +17,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Checkbox from '@material-ui/core/Checkbox';
 import Snackbar from '@material-ui/core/Snackbar';
 import {signup} from "../api/auth";
+import { Redirect } from "react-router-dom";
 
 class Signup extends React.Component {
   state = {
@@ -26,7 +27,8 @@ class Signup extends React.Component {
     showPassword: false,
     loading: false,
     open: false,
-    errorMessage: ''
+    errorMessage: '',
+    signUpSuccess: false
   };
 
   handleClose = (event, reason) => {
@@ -52,11 +54,23 @@ class Signup extends React.Component {
     event.preventDefault();
     this.setState({loading: true});
 
-    signup(email, password, name).then(
+    // Normal User
+    const roles = [{
+      role: "USER"
+    }];
+
+    signup(email, password, name, roles).then(
       response => {
         this.setState({loading: false});
-        if (response.success) {
+        if (response.token) {
           console.log('success', response.user);
+
+          const {user, token} = response;
+          // localStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('token', JSON.stringify(token));
+          this.props.login(user);
+          this.setState({ signUpSuccess: true });
+
         } else {
           console.log('fail', response.error);
           this.setState({
@@ -71,7 +85,9 @@ class Signup extends React.Component {
 
   render() {
     const {classes} = this.props;
-    const {loading, open, errorMessage} = this.state;
+    const {loading, open, errorMessage, signUpSuccess} = this.state;
+
+    if (signUpSuccess) return <Redirect to={"/"} />;
 
     return (
       <form className={classes.container} noValidate autoComplete="off">

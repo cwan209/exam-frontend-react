@@ -24,7 +24,6 @@ class App extends React.Component {
         isLoggedIn: true
       })
     }
-
   }
 
   login = user => {
@@ -35,7 +34,7 @@ class App extends React.Component {
   };
 
   logOut = () => {
-    localStorage.removeItem('user');
+    localStorage.removeItem('token');
     this.setState({
       isLoggedIn: false,
       user: null
@@ -54,7 +53,12 @@ class App extends React.Component {
                  login={this.login}
               />
           )}/>
-          <Route path={"/signup"} component={Signup}/>
+          {/*<Route path={"/signup"} component={Signup}/>*/}
+          <Route path={"/signup"} render={(props) => (
+            <Signup {...props}
+                   login={this.login}
+            />
+          )}/>
           <Route path={"/verify"} component={Verification}/>
 
           {/*<Route exact path={"/"} component={Home}/>*/}
