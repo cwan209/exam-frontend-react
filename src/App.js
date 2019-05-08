@@ -48,17 +48,19 @@ class App extends React.Component {
       <div className="App">
         <MuiThemeProvider theme={theme} >
           <Header isLoggedIn={isLoggedIn} logOut={this.logOut}/>
+
           <Route path={"/login"} render={(props) => (
               <Login {...props}
                  login={this.login}
               />
           )}/>
-          {/*<Route path={"/signup"} component={Signup}/>*/}
+
           <Route path={"/signup"} render={(props) => (
-            <Signup {...props}
-                   login={this.login}
-            />
+              <Signup {...props}
+                     login={this.login}
+              />
           )}/>
+
           <Route path={"/verify"} component={Verification}/>
 
           {/*<Route exact path={"/"} component={Home}/>*/}
