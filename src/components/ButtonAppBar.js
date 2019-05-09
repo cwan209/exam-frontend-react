@@ -11,6 +11,118 @@ import { Link } from "react-router-dom";
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import Drawer from '@material-ui/core/Drawer';
+import ListItem from '@material-ui/core/ListItem';
+import List from '@material-ui/core/List';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import CallMissedOutgoing from '@material-ui/icons/CallMissedOutgoing';
+import MailIcon from '@material-ui/icons/Mail';
+
+
+
+class ButtonAppBar extends React.Component {
+  state = {
+    right: false,
+  };
+
+  toggleDrawer = (side, open) => () => {
+    this.setState({
+      [side]: open,
+    });
+  };
+
+  handleProfileMenuOpen = () => {
+  };
+
+  render() {
+    const { classes, isLoggedIn, logOut } = this.props;
+
+    const sideList = (
+      <div className={classes.list}>
+        {/*<List>*/}
+          {/*{['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (*/}
+            {/*<ListItem button key={text}>*/}
+              {/*<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>*/}
+              {/*<ListItemText primary={text} />*/}
+            {/*</ListItem>*/}
+          {/*))}*/}
+        {/*</List>*/}
+        <Divider />
+        <List>
+            <ListItem button key={"logout"} onClick={logOut}>
+              <ListItemIcon><CallMissedOutgoing/></ListItemIcon>
+              <ListItemText primary={"logout"} />
+            </ListItem>
+        </List>
+      </div>
+    );
+
+    return (
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+              <MenuIcon/>
+            </IconButton>
+            <Typography variant="h6" color="inherit">
+              <Link to={'/'} className={classes.link}>Examify</Link>
+            </Typography>
+            <div className={classes.grow}/>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon/>
+              </div>
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+              />
+            </div>
+            {
+              isLoggedIn ?
+                <IconButton
+                  aria-owns={isLoggedIn ? 'material-appbar' : undefined}
+                  aria-haspopup="true"
+                  onClick={this.toggleDrawer('right', true)}
+                  color="inherit"
+                >
+                  <AccountCircle/>
+                </IconButton>
+                :
+                <div>
+                  <Button color="inherit">
+                    <Link className={classes.link} to={'/login'}>Log In</Link>
+                  </Button>
+                  <Button color="inherit">
+                    <Link className={classes.link} to={'/signup'}>Sign Up</Link>
+                  </Button>
+                </div>
+            }
+          </Toolbar>
+        </AppBar>
+        <Drawer anchor="right" open={this.state.right} onClose={this.toggleDrawer('right', false)}>
+          <div
+            tabIndex={0}
+            role="button"
+            onClick={this.toggleDrawer('right', false)}
+            onKeyDown={this.toggleDrawer('right', false)}
+          >
+            {sideList}
+          </div>
+        </Drawer>
+    </div>
+    )
+  }
+}
+
+ButtonAppBar.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
 
 const styles = theme => ({
@@ -70,53 +182,9 @@ const styles = theme => ({
       },
     },
   },
+  list: {
+    width: 250,
+  },
 });
-
-function ButtonAppBar(props) {
-  const { classes, isLoggedIn, logOut } = props;
-  return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" color="inherit"  >
-            <Link to={'/'} className={classes.link}>Examify</Link>
-          </Typography>
-          <div className={classes.grow} />
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-            />
-          </div>
-          {
-            isLoggedIn ?
-              <Button onClick={logOut} color="inherit">Log out</Button> :
-              <div>
-                <Button color="inherit">
-                  <Link className={classes.link} to={'/login'}>Log In</Link>
-                </Button>
-                <Button color="inherit">
-                  <Link className={classes.link} to={'/signup'}>Sign Up</Link>
-                </Button>
-              </div>
-          }
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
-}
-
-ButtonAppBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export default withStyles(styles)(ButtonAppBar);
