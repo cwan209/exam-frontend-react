@@ -16,6 +16,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import {login} from "../api/auth";
 import { Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 class Login extends React.Component {
   state = {
@@ -121,11 +122,24 @@ class Login extends React.Component {
               color="primary"
               onClick={this.handleSubmit}
               disabled={loading}
+              className={classes.button}
             >
               Log In
             </Button>
+
             {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
           </div>
+
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            // onClick={this.handleSubmit}
+            disabled={loading}
+            className={classes.button}
+          >
+            <Link className={classes.link} to={'/signup'}>Sign Up</Link>
+          </Button>
 
           <Snackbar
             anchorOrigin={{
@@ -200,6 +214,13 @@ const styles = theme => ({
     margin: theme.spacing.unit,
     position: 'relative',
     marginTop: 30
+  },
+  link: {
+    color: 'white',
+    textDecoration: 'none'
+  },
+  button: {
+    width: 100
   }
 });
 

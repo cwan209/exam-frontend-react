@@ -19,9 +19,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import CallMissedOutgoing from '@material-ui/icons/CallMissedOutgoing';
-import MailIcon from '@material-ui/icons/Mail';
-
-
+import AddIcon from '@material-ui/icons/Add';
 
 class ButtonAppBar extends React.Component {
   state = {
@@ -34,7 +32,7 @@ class ButtonAppBar extends React.Component {
     });
   };
 
-  handleProfileMenuOpen = () => {
+  onClickAdd = () => {
   };
 
   render() {
@@ -83,6 +81,16 @@ class ButtonAppBar extends React.Component {
                 }}
               />
             </div>
+            <IconButton
+              aria-owns={isLoggedIn ? 'material-appbar' : undefined}
+              aria-haspopup="true"
+              onClick={this.onClickAdd}
+              color="inherit"
+            >
+              <Link className={classes.link} to={'/addExam'}>
+                <AddIcon/>
+              </Link>
+            </IconButton>
             {
               isLoggedIn ?
                 <IconButton
@@ -96,11 +104,13 @@ class ButtonAppBar extends React.Component {
                 :
                 <div>
                   <Button color="inherit">
-                    <Link className={classes.link} to={'/login'}>Log In</Link>
+                    <Link className={classes.link} to={'/login'}>
+                      <AccountCircle/>
+                    </Link>
                   </Button>
-                  <Button color="inherit">
-                    <Link className={classes.link} to={'/signup'}>Sign Up</Link>
-                  </Button>
+                  {/*<Button color="inherit">*/}
+                    {/*<Link className={classes.link} to={'/signup'}>Sign Up</Link>*/}
+                  {/*</Button>*/}
                 </div>
             }
           </Toolbar>

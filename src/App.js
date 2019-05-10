@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import {MuiThemeProvider} from '@material-ui/core/styles';
 import {theme} from './settings/theme';
 import Verification from "./pages/Verification";
+import AddExam from "./pages/AddExam";
 
 class App extends React.Component {
 
@@ -16,7 +17,7 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem('token'));
     console.log('localStorage', user)
     if (user) {
       this.setState({
@@ -44,6 +45,7 @@ class App extends React.Component {
   render() {
     const {isLoggedIn, user} = this.state;
     console.log(isLoggedIn, user);
+
     return (
       <div className="App">
         <MuiThemeProvider theme={theme} >
@@ -57,11 +59,13 @@ class App extends React.Component {
 
           <Route path={"/signup"} render={(props) => (
               <Signup {...props}
-                     login={this.login}
+                   login={this.login}
               />
           )}/>
 
           <Route path={"/verify"} component={Verification}/>
+
+          <Route path={"/addExam"} component={AddExam}/>
 
           {/*<Route exact path={"/"} component={Home}/>*/}
 

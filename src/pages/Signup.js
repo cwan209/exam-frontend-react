@@ -12,9 +12,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Checkbox from '@material-ui/core/Checkbox';
 import Snackbar from '@material-ui/core/Snackbar';
 import {signup} from "../api/auth";
 import { Redirect } from "react-router-dom";
@@ -38,7 +36,6 @@ class Signup extends React.Component {
 
     this.setState({ open: false });
   };
-
 
   handleChange = prop => event => {
     console.log("handleChange", prop);
