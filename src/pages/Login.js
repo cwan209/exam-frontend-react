@@ -17,6 +17,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 import {login} from "../api/auth";
 import { Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
+import {saveUser} from "../actions/authActions";
+import { connect } from 'react-redux';
 
 class Login extends React.Component {
   state = {
@@ -37,7 +39,6 @@ class Login extends React.Component {
 
     this.setState({ open: false });
   };
-
 
   handleChange = prop => event => {
     console.log("handleChange", prop);
@@ -60,7 +61,11 @@ class Login extends React.Component {
           const {user, token} = response;
           // localStorage.setItem('user', JSON.stringify(user));
           localStorage.setItem('token', JSON.stringify(token));
+
+          // dispatch user
           this.props.login(user);
+          this.props.saveUser(user);
+
           this.setState({ redirectToReferrer: true });
         } else {
           console.log('fail', response);
@@ -224,7 +229,12 @@ const styles = theme => ({
   }
 });
 
+const mapDispatchToProps = dispatch => ({
+  saveUser : user => dispatch(saveUser(user))
+});
 
-export default withStyles(styles)(Login);
+export default withStyles(styles)(
+  connect( mapDispatchToProps )(Login)
+);
 
 

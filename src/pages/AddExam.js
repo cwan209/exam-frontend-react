@@ -7,7 +7,6 @@ import {login} from "../api/auth";
 import { Redirect } from "react-router-dom";
 import AddIcon from '@material-ui/icons/Add';
 
-
 class AddExam extends React.Component {
   state = {
     email: '',
