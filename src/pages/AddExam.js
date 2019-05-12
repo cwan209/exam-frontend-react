@@ -2,86 +2,46 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
-import Paper from '@material-ui/core/Paper';
-import {login} from "../api/auth";
-import { Redirect } from "react-router-dom";
 import AddIcon from '@material-ui/icons/Add';
+import Question from '../components/Question';
 
 class AddExam extends React.Component {
-  state = {
-    email: '',
-    password: '',
-    name: '',
-    showPassword: false,
+  state ={
     loading: false,
     open: false,
-    errorMessage: '',
-    redirectToReferrer: false
+    questions: []
   };
 
-  handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    this.setState({ open: false });
-  };
-
-
-  handleChange = prop => event => {
-    console.log("handleChange", prop);
-    this.setState({[prop]: event.target.value});
-  };
-
-  handleClickShowPassword = () => {
-    this.setState(state => ({showPassword: !state.showPassword}));
-  };
-
-  handleSubmit = event => {
-    const {email, password} = this.state;
-    event.preventDefault();
-    this.setState({loading: true});
-
-    login(email, password).then(
-      response => {
-        this.setState({loading: false});
-        if (response.token) {
-          const {user, token} = response;
-          // localStorage.setItem('user', JSON.stringify(user));
-          localStorage.setItem('token', JSON.stringify(token));
-          this.props.login(user);
-          this.setState({ redirectToReferrer: true });
-        } else {
-          console.log('fail', response);
-          this.setState({
-            open: true,
-            errorMessage: 'Login Failed'
-          });
-        }
-      }
-    );
+  onClickAdd = () => {
+    this.setState({
+      questions: [...this.state.questions, {}]
+    });
   };
 
   render() {
     const {classes} = this.props;
-    const {loading, open, errorMessage, redirectToReferrer} = this.state;
-    let { from } = this.props.location.state || { from: { pathname: "/" } };
+    const {questions} = this.state;
 
-    if (redirectToReferrer) return <Redirect to={from} />;
+    console.log('questions', questions);
 
     return (
       <form className={classes.container} noValidate autoComplete="off">
-        <Paper className={classes.paper} elevation={10}>
-          <IconButton
-            // aria-owns={isLoggedIn ? 'material-appbar' : undefined}
-            aria-haspopup="true"
-            onClick={this.onClickAdd}
-            color="inherit"
-            className={classes.add}
-          >
-              <AddIcon/>
-          </IconButton>
-        </Paper>
+
+        <IconButton
+          aria-haspopup="true"
+          onClick={this.onClickAdd}
+          color="inherit"
+          className={classes.add}
+        >
+          <AddIcon/>
+        </IconButton>
+
+        {
+          questions.map(
+            question =>
+              <Question/>
+          )
+        }
       </form>
     )
   }
