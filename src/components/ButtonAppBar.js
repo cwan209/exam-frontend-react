@@ -20,6 +20,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import CallMissedOutgoing from '@material-ui/icons/CallMissedOutgoing';
 import AddIcon from '@material-ui/icons/Add';
+import {connect} from "react-redux";
+import {logout} from "../actions/authActions";
 
 class ButtonAppBar extends React.Component {
   state = {
@@ -35,8 +37,13 @@ class ButtonAppBar extends React.Component {
   onClickAdd = () => {
   };
 
+  onClickLogout = () => {
+    this.props.dispatch(logout());
+  };
+
   render() {
-    const { classes, isLoggedIn, logOut } = this.props;
+    const { classes, loggedIn } = this.props;
+    console.log('loggedIn', loggedIn);
 
     const sideList = (
       <div className={classes.list}>
@@ -50,7 +57,7 @@ class ButtonAppBar extends React.Component {
         {/*</List>*/}
         <Divider />
         <List>
-            <ListItem button key={"logout"} onClick={logOut}>
+            <ListItem button key={"logout"} onClick={this.onClickLogout}>
               <ListItemIcon><CallMissedOutgoing/></ListItemIcon>
               <ListItemText primary={"logout"} />
             </ListItem>
@@ -82,7 +89,7 @@ class ButtonAppBar extends React.Component {
               />
             </div>
             <IconButton
-              aria-owns={isLoggedIn ? 'material-appbar' : undefined}
+              aria-owns={loggedIn ? 'material-appbar' : undefined}
               aria-haspopup="true"
               onClick={this.onClickAdd}
               color="inherit"
@@ -92,9 +99,9 @@ class ButtonAppBar extends React.Component {
               </Link>
             </IconButton>
             {
-              isLoggedIn ?
+              loggedIn ?
                 <IconButton
-                  aria-owns={isLoggedIn ? 'material-appbar' : undefined}
+                  aria-owns={loggedIn ? 'material-appbar' : undefined}
                   aria-haspopup="true"
                   onClick={this.toggleDrawer('right', true)}
                   color="inherit"
@@ -197,4 +204,13 @@ const styles = theme => ({
   },
 });
 
-export default withStyles(styles)(ButtonAppBar);
+const mapStateToProps = state => {
+  return {
+    user: state.authReducer.user,
+    loggedIn: state.authReducer.loggedIn
+  };
+};
+
+export default withStyles(styles)(
+  connect( mapStateToProps )(ButtonAppBar)
+);

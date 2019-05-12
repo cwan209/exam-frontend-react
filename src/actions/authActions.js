@@ -1,4 +1,10 @@
-export const saveUser = user => ({
+export const saveUser = (user, token) => ({
   type: 'SAVE_USER',
-  user
+  user,
+  token
 });
+
+export const logout = () => ({
+  type: 'LOG_OUT'
+});
+

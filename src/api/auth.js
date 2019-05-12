@@ -1,4 +1,5 @@
 import * as config from '../config';
+import {getAuthToken} from "../helper/authHelper";
 
 export const signup = (email, password, username, roles) => {
   const url = `${config.apiHost}v1/auth/signup`;
@@ -70,6 +71,30 @@ export const login = (email, password, name) => {
     })
     .then(response => response.json())
     .then(response => {
+      return response;
+    }).catch(error => {
+      console.error(error);
+      return {
+        success: false,
+        error: error
+      }
+    });
+};
+
+export const getCurrentUser = () => {
+  const url = `${config.apiHost}v1/auth/me`;
+
+  return fetch(url,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getAuthToken()
+      }
+    })
+    .then(response => response.json())
+    .then(response => {
+      console.log('getCurrentUser', response);
       return response;
     }).catch(error => {
       console.error(error);

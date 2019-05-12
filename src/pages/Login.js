@@ -59,12 +59,9 @@ class Login extends React.Component {
         this.setState({loading: false});
         if (response.token) {
           const {user, token} = response;
-          // localStorage.setItem('user', JSON.stringify(user));
-          localStorage.setItem('token', JSON.stringify(token));
 
-          // dispatch user
-          this.props.login(user);
-          this.props.saveUser(user);
+          // localStorage.setItem('token', JSON.stringify(token));
+          this.props.dispatch(saveUser(user, token));
 
           this.setState({ redirectToReferrer: true });
         } else {
@@ -229,12 +226,14 @@ const styles = theme => ({
   }
 });
 
-const mapDispatchToProps = dispatch => ({
-  saveUser : user => dispatch(saveUser(user))
-});
+const mapStateToProps = state => {
+  return {
+
+  }
+};
 
 export default withStyles(styles)(
-  connect( mapDispatchToProps )(Login)
+  connect( mapStateToProps )(Login)
 );
 
 

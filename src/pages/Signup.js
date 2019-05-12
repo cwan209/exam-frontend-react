@@ -16,6 +16,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import {signup} from "../api/auth";
 import { Redirect } from "react-router-dom";
+import {connect} from "react-redux";
+import {saveUser} from "../actions/authActions";
 
 class Signup extends React.Component {
   state = {
@@ -63,9 +65,7 @@ class Signup extends React.Component {
           console.log('success', response.user);
 
           const {user, token} = response;
-          // localStorage.setItem('user', JSON.stringify(user));
-          localStorage.setItem('token', JSON.stringify(token));
-          this.props.login(user);
+          this.props.dispatch(saveUser(user, token));
           this.setState({ signUpSuccess: true });
 
         } else {
@@ -160,7 +160,6 @@ class Signup extends React.Component {
             ]}
           />
         </Paper>
-
       </form>
     )
   }
@@ -215,7 +214,12 @@ const styles = theme => ({
   }
 });
 
+const mapStateToProps = state => {
+  return {
 
-export default withStyles(styles)(Signup);
+  }
+};
 
-
+export default withStyles(styles)(
+  connect( mapStateToProps )(Signup)
+);

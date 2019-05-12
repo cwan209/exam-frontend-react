@@ -1,67 +1,53 @@
 import React, {Component} from 'react';
 import './App.css';
 import Header from './components/ButtonAppBar';
-import {Route} from "react-router-dom";
+import {Route, withRouter} from "react-router-dom";
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import {MuiThemeProvider} from '@material-ui/core/styles';
 import {theme} from './settings/theme';
 import Verification from "./pages/Verification";
 import AddExam from "./pages/AddExam";
+import {getCurrentUser} from "./api/auth";
+import {connect} from "react-redux";
+import {saveUser} from "./actions/authActions";
 
 class App extends React.Component {
 
   state = {
-    user: null,
-    isLoggedIn: false
+    loading: false
   };
 
   componentDidMount() {
-    const user = JSON.parse(localStorage.getItem('token'));
-    console.log('localStorage', user)
-    if (user) {
-      this.setState({
-        user: user,
-        isLoggedIn: true
-      })
-    }
+
+    this.setState({loading: true});
+
+    getCurrentUser().then(
+      response => {
+        this.setState({loading: false});
+
+        const {user} = response;
+        if (user) {
+          this.props.dispatch(saveUser(user));
+        } else {
+
+        }
+      }
+    )
   }
 
-  login = user => {
-    this.setState({
-      isLoggedIn: true,
-      user: user
-    });
-  };
-
-  logOut = () => {
-    localStorage.removeItem('token');
-    this.setState({
-      isLoggedIn: false,
-      user: null
-    });
-  };
-
   render() {
-    const {isLoggedIn, user} = this.state;
-    console.log(isLoggedIn, user);
 
     return (
       <div className="App">
         <MuiThemeProvider theme={theme} >
-          <Header isLoggedIn={isLoggedIn} logOut={this.logOut}/>
+          <Header/>
 
           <Route path={"/login"} render={(props) => (
-              <Login {...props}
-                 login={this.login}
-              />
+              <Login {...props} />
           )}/>
 
-          <Route path={"/signup"} render={(props) => (
-              <Signup {...props}
-                   login={this.login}
-              />
-          )}/>
+          <Route path={"/signup"} component={Signup}/>
 
           <Route path={"/verify"} component={Verification}/>
 
@@ -77,4 +63,10 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+
+  }
+};
+
+export default  withRouter(connect( mapStateToProps )(App));
