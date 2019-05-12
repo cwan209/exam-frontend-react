@@ -83,6 +83,7 @@ export const login = (email, password, name) => {
 
 export const getCurrentUser = () => {
   const url = `${config.apiHost}v1/auth/me`;
+  console.log(getAuthToken());
 
   return fetch(url,
     {
