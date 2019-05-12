@@ -3,14 +3,18 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
-import Question from '../components/Question';
+import QuestionEditor from '../components/QuestionEditor';
 
 class AddExam extends React.Component {
   state ={
     loading: false,
     open: false,
-    questions: []
+    questions: [{}]
   };
+
+  componentDidMount() {
+
+  }
 
   onClickAdd = () => {
     this.setState({
@@ -39,7 +43,7 @@ class AddExam extends React.Component {
         {
           questions.map(
             question =>
-              <Question/>
+              <QuestionEditor/>
           )
         }
       </form>
