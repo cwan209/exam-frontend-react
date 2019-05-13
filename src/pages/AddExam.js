@@ -3,13 +3,18 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
-import QuestionEditor from '../components/QuestionEditor';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import Grid from '@material-ui/core/Grid';
+
 
 class AddExam extends React.Component {
   state ={
     loading: false,
-    open: false,
-    questions: [{}]
+    type: '',
+    questions: []
   };
 
   componentDidMount() {
@@ -17,35 +22,94 @@ class AddExam extends React.Component {
   }
 
   onClickAdd = () => {
+    const {type} = this.state;
+
+    if(!type) {
+      alert('Please choose type');
+      return;
+    }
+
     this.setState({
       questions: [...this.state.questions, {}]
     });
+  };
+
+  handleChange = prop => event => {
+    console.log("handleChange", prop);
+    this.setState({[prop]: event.target.value});
+  };
+
+  renderQuestoin = type => {
+
   };
 
   render() {
     const {classes} = this.props;
     const {questions} = this.state;
 
+    const types = [
+      {name: 'Multiple Choice', value: 'mc'},
+      {name: 'Multiple Answers', value: 'ma'},
+      {name: 'True/False', value: 'tf'},
+      {name: 'Matching', value: 'm'},
+      {name: 'Short Answer', value: 'sa'},
+      {name: 'Essay', value: 'e'}
+    ];
     console.log('questions', questions);
 
     return (
       <form className={classes.container} noValidate autoComplete="off">
-
-        <IconButton
-          aria-haspopup="true"
-          onClick={this.onClickAdd}
-          color="inherit"
-          className={classes.add}
-        >
-          <AddIcon/>
-        </IconButton>
-
         {
           questions.map(
             question =>
-              <QuestionEditor/>
+              <p>Question</p>
           )
         }
+        <Grid
+          container
+          spacing={16}
+          className={classes.questionType}
+          alignItems={'center'}
+          direction={'row'}
+          justify={'flex-start'}
+        >
+          <div>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="demo-controlled-open-select">Question Type</InputLabel>
+              <Select
+                open={this.state.open}
+                onClose={this.handleClose}
+                onOpen={this.handleOpen}
+                value={this.state.type}
+                onChange={this.handleChange('type')}
+                inputProps={{
+                  name: 'type',
+                  id: 'demo-controlled-open-select',
+                }}
+              >
+                {
+                  types.map(
+                    type =>
+                      <MenuItem value={type.value}>
+                        <em>{type.name}</em>
+                      </MenuItem>
+                  )
+                }
+              </Select>
+            </FormControl>
+          </div>
+
+          {/*Add button*/}
+          <IconButton
+            aria-haspopup="true"
+            onClick={this.onClickAdd}
+            color="inherit"
+            className={classes.add}
+          >
+            <AddIcon/>
+          </IconButton>
+        </Grid>
+
       </form>
     )
   }
@@ -66,47 +130,22 @@ const styles = theme => ({
       marginLeft: 'auto',
       marginRight: 'auto',
     },
-  },
-  paper: {
-    marginTop: theme.spacing.unit * 8,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
-  },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 300,
-  },
-  dense: {
-    marginTop: 19,
-  },
-  menu: {
-    width: 200,
-  },
-  buttonProgress: {
-    color: theme.palette.primary,
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
-  },
-  wrapper: {
-    margin: theme.spacing.unit,
-    position: 'relative',
-    marginTop: 30
-  },
-  link: {
-    color: 'white',
-    textDecoration: 'none'
-  },
-  button: {
-    width: 100
+    paddingTop: 50
   },
   add: {
-    backgroundColor: theme.palette.secondary
+    backgroundColor: theme.palette.secondary,
+    marginTop: 15
+  },
+  button: {
+    display: 'block',
+    marginTop: theme.spacing.unit * 2,
+  },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120,
+  },
+  questionType: {
+    flexGrow: 1
   }
 });
 
