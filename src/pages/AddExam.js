@@ -21,7 +21,7 @@ class AddExam extends React.Component {
 
   }
 
-  onClickAdd = () => {
+  onClickAddQuestion = () => {
     const {type} = this.state;
 
     if(!type) {
@@ -35,7 +35,6 @@ class AddExam extends React.Component {
   };
 
   handleChange = prop => event => {
-    console.log("handleChange", prop);
     this.setState({[prop]: event.target.value});
   };
 
@@ -102,7 +101,7 @@ class AddExam extends React.Component {
           {/*Add button*/}
           <IconButton
             aria-haspopup="true"
-            onClick={this.onClickAdd}
+            onClick={this.onClickAddQuestion}
             color="inherit"
             className={classes.add}
           >

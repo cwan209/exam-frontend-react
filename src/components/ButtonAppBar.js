@@ -20,12 +20,20 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import CallMissedOutgoing from '@material-ui/icons/CallMissedOutgoing';
 import AddIcon from '@material-ui/icons/Add';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
 import {connect} from "react-redux";
 import {logout} from "../actions/authActions";
 
 class ButtonAppBar extends React.Component {
   state = {
-    right: false,
+    drawerOpen: false,
+    dialogOpen: false,
+    examTitle: null
   };
 
   toggleDrawer = (side, open) => () => {
@@ -34,11 +42,30 @@ class ButtonAppBar extends React.Component {
     });
   };
 
-  onClickAdd = () => {
+  onClickAddExam = () => {
+    const {examTitle} = this.state;
+    if(!examTitle || examTitle.trim().length <= 0) {
+      alert('Please provide a title');
+    } else if(examTitle.length > 200) {
+      alert('Title should be less than 200');
+    } else {
+      // Call api here
+    }
   };
 
   onClickLogout = () => {
     this.props.dispatch(logout());
+  };
+
+  handleDialogClose = () => {
+    this.setState({ dialogOpen: false });
+  };
+  handleDialogOpen = () => {
+    this.setState({ dialogOpen: true });
+  };
+
+  handleChange = prop => event => {
+    this.setState({[prop]: event.target.value});
   };
 
   render() {
@@ -67,6 +94,8 @@ class ButtonAppBar extends React.Component {
 
     return (
       <div className={classes.root}>
+
+        {/*bar*/}
         <AppBar position="static">
           <Toolbar>
             <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
@@ -91,7 +120,7 @@ class ButtonAppBar extends React.Component {
             <IconButton
               aria-owns={loggedIn ? 'material-appbar' : undefined}
               aria-haspopup="true"
-              onClick={this.onClickAdd}
+              onClick={this.handleDialogOpen}
               color="inherit"
             >
               <Link className={classes.link} to={'/addExam'}>
@@ -122,7 +151,41 @@ class ButtonAppBar extends React.Component {
             }
           </Toolbar>
         </AppBar>
-        <Drawer anchor="right" open={this.state.right} onClose={this.toggleDrawer('right', false)}>
+
+        {/*modal*/}
+        <Dialog
+          open={this.state.dialogOpen}
+          onClose={this.handleDialogClose}
+          aria-labelledby="form-dialog-title"
+        >
+          {/*<DialogTitle id="form-dialog-title">Subscribe</DialogTitle>*/}
+          <DialogContent>
+            <DialogContentText>
+              Please provide a title for your exam.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Exam Title"
+              type="text"
+              value={this.state.examTitle}
+              onChange={this.handleChange('examTitle')}
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleDialogClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.onClickAddExam} color="primary">
+              Add
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/*drawer*/}
+        <Drawer anchor="right" open={this.state.drawerOpen} onClose={this.toggleDrawer('right', false)}>
           <div
             tabIndex={0}
             role="button"
