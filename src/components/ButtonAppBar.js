@@ -33,6 +33,8 @@ class ButtonAppBar extends React.Component {
   state = {
     drawerOpen: false,
     dialogOpen: false,
+    showDialogError: false,
+    dialogError: '',
     examTitle: null
   };
 
@@ -45,12 +47,28 @@ class ButtonAppBar extends React.Component {
   onClickAddExam = () => {
     const {examTitle} = this.state;
     if(!examTitle || examTitle.trim().length <= 0) {
-      alert('Please provide a title');
+      this.showDialogError('Please Provide a title');
     } else if(examTitle.length > 200) {
-      alert('Title should be less than 200');
+      this.showDialogError('Title should be less than 200');
     } else {
+      this.hideDialogError();
       // Call api here
+
     }
+  };
+
+  showDialogError = error => {
+    this.setState({
+      showDialogError: true,
+      dialogError: error
+    });
+  };
+
+  hideDialogError = () => {
+    this.setState({
+      showDialogError: false,
+      dialogError: ''
+    });
   };
 
   onClickLogout = () => {
@@ -60,6 +78,7 @@ class ButtonAppBar extends React.Component {
   handleDialogClose = () => {
     this.setState({ dialogOpen: false });
   };
+
   handleDialogOpen = () => {
     this.setState({ dialogOpen: true });
   };
@@ -70,7 +89,7 @@ class ButtonAppBar extends React.Component {
 
   render() {
     const { classes, loggedIn } = this.props;
-    console.log('loggedIn', loggedIn);
+    const { showDialogError, dialogError } = this.state;
 
     const sideList = (
       <div className={classes.list}>
@@ -158,7 +177,6 @@ class ButtonAppBar extends React.Component {
           onClose={this.handleDialogClose}
           aria-labelledby="form-dialog-title"
         >
-          {/*<DialogTitle id="form-dialog-title">Subscribe</DialogTitle>*/}
           <DialogContent>
             <DialogContentText>
               Please provide a title for your exam.
@@ -169,10 +187,15 @@ class ButtonAppBar extends React.Component {
               id="name"
               label="Exam Title"
               type="text"
+              error={dialogError}
               value={this.state.examTitle}
               onChange={this.handleChange('examTitle')}
               fullWidth
             />
+            {
+              showDialogError &&
+              <DialogContentText className={classes.dialogError}>{dialogError}</DialogContentText>
+            }
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleDialogClose} color="primary">
@@ -265,6 +288,9 @@ const styles = theme => ({
   list: {
     width: 250,
   },
+  dialogError: {
+    color: 'red'
+  }
 });
 
 const mapStateToProps = state => {
