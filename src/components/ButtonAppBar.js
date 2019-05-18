@@ -30,6 +30,8 @@ import {logout} from "../actions/authActions";
 import {createNewExam} from "../api/exam";
 import { withRouter } from "react-router";
 import {showGlobalError} from "../actions/errorSnackBarActions";
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 
 class ButtonAppBar extends React.Component {
@@ -38,7 +40,8 @@ class ButtonAppBar extends React.Component {
     dialogOpen: false,
     showDialogError: false,
     dialogError: '',
-    examTitle: ''
+    examTitle: '',
+    loading: false
   };
 
   toggleDrawer = (side, open) => () => {
@@ -58,8 +61,11 @@ class ButtonAppBar extends React.Component {
     } else {
       this.hideDialogError();
 
+      this.setState({loading: true});
+
       createNewExam(examTitle).then(
         response => {
+          this.setState({loading: false});
           if (response.id) {
             this.handleDialogClose();
 
@@ -70,6 +76,7 @@ class ButtonAppBar extends React.Component {
           }
         }
       ).catch(error => {
+        this.setState({loading: false});
         console.log(error);
         this.props.dispatch(showGlobalError('Create Exam failed'));
       });
@@ -100,7 +107,17 @@ class ButtonAppBar extends React.Component {
   };
 
   handleDialogOpen = () => {
-    this.setState({ dialogOpen: true });
+
+    const {loggedIn, history} = this.props;
+
+    if (!loggedIn) {
+      this.props.dispatch(showGlobalError('Please login before you create a new exam'));
+      history.push({
+        pathname: '/login',
+      });
+    } else {
+      this.setState({ dialogOpen: true });
+    }
   };
 
   handleChange = prop => event => {
@@ -109,7 +126,7 @@ class ButtonAppBar extends React.Component {
 
   render() {
     const { classes, loggedIn } = this.props;
-    const { showDialogError, dialogError } = this.state;
+    const { showDialogError, dialogError, loading } = this.state;
 
     const sideList = (
       <div className={classes.list}>
@@ -218,9 +235,14 @@ class ButtonAppBar extends React.Component {
             <Button onClick={this.handleDialogClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.onClickAddExam} color="primary">
-              Add
-            </Button>
+            {loading ?
+              <CircularProgress size={24} className={classes.buttonProgress} />
+              :
+              <Button onClick={this.onClickAddExam} color="primary">
+                Add
+              </Button>
+            }
+
           </DialogActions>
         </Dialog>
 
@@ -307,6 +329,9 @@ const styles = theme => ({
   },
   dialogError: {
     color: 'red'
+  },
+  buttonProgress: {
+    marginRight: 20
   }
 });
 
