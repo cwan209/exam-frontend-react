@@ -3,7 +3,6 @@ import {getAuthToken} from "../helper/authHelper";
 
 export const createNewExam = title => {
   const url = `${config.apiHost}/v1/exams`;
-  console.log('createNewExam', getAuthToken());
 
   return fetch(url,
     {
@@ -25,7 +24,6 @@ export const createNewExam = title => {
 
 export const getExamById = id => {
   const url = `${config.apiHost}/v1/exams/${id}`;
-  console.log('getExamById', getAuthToken());
 
   return fetch(url,
     {

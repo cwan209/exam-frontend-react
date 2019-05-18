@@ -66,12 +66,12 @@ class ButtonAppBar extends React.Component {
       createNewExam(examTitle).then(
         response => {
           this.setState({loading: false});
-          if (response.id) {
+          if (response.exam) {
             this.handleDialogClose();
 
             history.push({
               pathname: '/addExam',
-              state: { examId: response.id }
+              state: { examId: response.exam.id }
             })
           }
         }
@@ -99,7 +99,13 @@ class ButtonAppBar extends React.Component {
   };
 
   onClickLogout = () => {
+    const {history} = this.props;
+
     this.props.dispatch(logout());
+    history.push({
+      pathname: '/'
+    })
+
   };
 
   handleDialogClose = () => {

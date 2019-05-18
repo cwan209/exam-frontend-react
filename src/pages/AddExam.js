@@ -9,26 +9,37 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Grid from '@material-ui/core/Grid';
 import {getExamById} from "../api/exam";
-
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Typography from '@material-ui/core/Typography';
 
 class AddExam extends React.Component {
   state ={
     loading: false,
     type: '',
-    questions: [],
-    exam: null
+    title: '',
+    questions: []
   };
 
   componentDidMount() {
     const {examId} = this.props.location.state;
 
+    this.setState({loading: true});
+
     getExamById(examId).then(
       response => {
-        if (response.exam) {
-          this.setState({exam: response.exam})
+        this.setState({loading: false});
+
+        const {exam} = response;
+        if (exam) {
+          this.setState({
+            title: exam.title,
+            questions: exam.questions
+          })
         }
       }
     ).catch(error => {
+      this.setState({loading: false});
+
       console.error(error);
     });
   }
@@ -56,7 +67,7 @@ class AddExam extends React.Component {
 
   render() {
     const {classes} = this.props;
-    const {questions} = this.state;
+    const {questions, loading, title} = this.state;
 
     const types = [
       {name: 'Multiple Choice', value: 'mc'},
@@ -69,13 +80,21 @@ class AddExam extends React.Component {
     console.log('questions', questions);
 
     return (
+      loading
+        ?
+      <LinearProgress color={"secondary"} />
+        :
       <form className={classes.container} noValidate autoComplete="off">
+        <Typography component="h2" variant="display2" gutterBottom>
+          {title}
+        </Typography>
         {
           questions.map(
             (question, index) =>
               <p key={index}>Question</p>
           )
         }
+
         <Grid
           container
           spacing={16}

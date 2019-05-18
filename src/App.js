@@ -15,6 +15,7 @@ import {PrivateRoute} from "./components/PrivateRouter";
 import ErrorSnackBar from './components/ErrorSnackBar';
 import {showGlobalError} from "./actions/errorSnackBarActions";
 
+
 class App extends React.Component {
 
   state = {

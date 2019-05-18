@@ -45,18 +45,6 @@ class Verification extends React.Component {
     return (
       <form className={classes.container} noValidate autoComplete="off">
         <Paper className={classes.paper}>
-          {
-            loading ?
-              <CircularProgress className={classes.progress} />
-              :
-              success ?
-              <Typography variant="h5" component="h3">
-                Congratulations! Account Verified!
-              </Typography> :
-              <Typography variant="h5" component="h3">
-                Verification Failed, Please signup again
-              </Typography>
-          }
         </Paper>
       </form>
     )
