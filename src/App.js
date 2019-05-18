@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React from 'react';
 import './App.css';
 import Header from './components/ButtonAppBar';
-import {BrowserRouter as Router, Route, withRouter} from "react-router-dom";
+import { Route, withRouter} from "react-router-dom";
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import {MuiThemeProvider} from '@material-ui/core/styles';
@@ -13,6 +13,7 @@ import {connect} from "react-redux";
 import {saveUser} from "./actions/authActions";
 import {PrivateRoute} from "./components/PrivateRouter";
 import ErrorSnackBar from './components/ErrorSnackBar';
+import {showGlobalError} from "./actions/errorSnackBarActions";
 
 class App extends React.Component {
 
@@ -37,8 +38,7 @@ class App extends React.Component {
         }
       ).catch(error => {
         console.log(error);
-
-        //
+        this.props.dispatch(showGlobalError("Invalid token, please login again"));
       })
 
     }

@@ -70,8 +70,8 @@ class ButtonAppBar extends React.Component {
           }
         }
       ).catch(error => {
-        console.error(error);
-
+        console.log(error);
+        this.props.dispatch(showGlobalError('Create Exam failed'));
       });
 
     }

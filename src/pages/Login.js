@@ -13,7 +13,6 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Snackbar from '@material-ui/core/Snackbar';
 import {login} from "../api/auth";
 import { Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -28,17 +27,8 @@ class Login extends React.Component {
     name: '',
     showPassword: false,
     loading: false,
-    open: false,
     errorMessage: '',
     redirectToReferrer: false
-  };
-
-  handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    this.setState({ open: false });
   };
 
   handleChange = prop => event => {
@@ -65,13 +55,7 @@ class Login extends React.Component {
 
           this.setState({ redirectToReferrer: true });
         } else {
-          // console.log('fail', response);
           this.props.dispatch(showGlobalError("Login Failed"))
-
-          // this.setState({
-          //   open: true,
-          //   errorMessage: ''
-          // });
         }
       }
     );
@@ -79,7 +63,7 @@ class Login extends React.Component {
 
   render() {
     const {classes} = this.props;
-    const {loading, open, errorMessage, redirectToReferrer} = this.state;
+    const {loading, redirectToReferrer} = this.state;
     let { from } = this.props.location.state || { from: { pathname: "/" } };
 
     if (redirectToReferrer) return <Redirect to={from} />;
@@ -144,27 +128,6 @@ class Login extends React.Component {
           >
             <Link className={classes.link} to={'/signup'}>Sign Up</Link>
           </Button>
-
-          {/*<Snackbar*/}
-            {/*anchorOrigin={{*/}
-              {/*vertical: 'bottom',*/}
-              {/*horizontal: 'center',*/}
-            {/*}}*/}
-            {/*open={open}*/}
-            {/*autoHideDuration={6000}*/}
-            {/*onClose={this.handleClose}*/}
-            {/*ContentProps={{*/}
-              {/*'aria-describedby': 'message-id',*/}
-            {/*}}*/}
-            {/*message={*/}
-              {/*<span id="message-id">{errorMessage}</span>*/}
-            {/*}*/}
-            {/*action={[*/}
-              {/*<Button key="okay" color="secondary" size="small" onClick={this.handleClose}>*/}
-                {/*Okay*/}
-              {/*</Button>,*/}
-            {/*]}*/}
-          {/*/>*/}
         </Paper>
 
       </form>

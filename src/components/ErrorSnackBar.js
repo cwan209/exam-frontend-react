@@ -15,13 +15,11 @@ class ErrorSnackBar extends React.Component {
       return;
     }
 
-    // this.setState({ open: false });
     this.props.dispatch(hideGlobalError());
   };
 
   render() {
-    const {classes, open, errorMessage} = this.props;
-    console.log(open, errorMessage);
+    const {open, errorMessage} = this.props;
     return (
       <Snackbar
         anchorOrigin={{

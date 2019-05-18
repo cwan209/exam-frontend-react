@@ -8,7 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Grid from '@material-ui/core/Grid';
-import {createNewExam, getExamById} from "../api/exam";
+import {getExamById} from "../api/exam";
 
 
 class AddExam extends React.Component {
