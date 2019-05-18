@@ -24,10 +24,12 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import {connect} from "react-redux";
 import {logout} from "../actions/authActions";
+import {createNewExam} from "../api/exam";
+import { withRouter } from "react-router";
+
 
 class ButtonAppBar extends React.Component {
   state = {
@@ -35,7 +37,7 @@ class ButtonAppBar extends React.Component {
     dialogOpen: false,
     showDialogError: false,
     dialogError: '',
-    examTitle: null
+    examTitle: ''
   };
 
   toggleDrawer = (side, open) => () => {
@@ -46,13 +48,29 @@ class ButtonAppBar extends React.Component {
 
   onClickAddExam = () => {
     const {examTitle} = this.state;
-    if(!examTitle || examTitle.trim().length <= 0) {
+    const {history} = this.props;
+
+    if(examTitle.trim().length <= 0) {
       this.showDialogError('Please Provide a title');
     } else if(examTitle.length > 200) {
       this.showDialogError('Title should be less than 200');
     } else {
       this.hideDialogError();
-      // Call api here
+
+      createNewExam(examTitle).then(
+        response => {
+          if (response.id) {
+            this.handleDialogClose();
+
+            history.push({
+              pathname: '/addExam',
+              state: { examId: response.id }
+            })
+          }
+        }
+      ).catch(error => {
+        console.error(error);
+      });
 
     }
   };
@@ -111,6 +129,8 @@ class ButtonAppBar extends React.Component {
       </div>
     );
 
+    console.log(loggedIn)
+
     return (
       <div className={classes.root}>
 
@@ -142,16 +162,16 @@ class ButtonAppBar extends React.Component {
               onClick={this.handleDialogOpen}
               color="inherit"
             >
-              <Link className={classes.link} to={'/addExam'}>
+              {/*<Link className={classes.link} to={'/addExam'}>*/}
                 <AddIcon/>
-              </Link>
+              {/*</Link>*/}
             </IconButton>
             {
               loggedIn ?
                 <IconButton
                   aria-owns={loggedIn ? 'material-appbar' : undefined}
                   aria-haspopup="true"
-                  onClick={this.toggleDrawer('right', true)}
+                  onClick={this.toggleDrawer('drawerOpen', true)}
                   color="inherit"
                 >
                   <AccountCircle/>
@@ -163,9 +183,6 @@ class ButtonAppBar extends React.Component {
                       <AccountCircle/>
                     </Link>
                   </Button>
-                  {/*<Button color="inherit">*/}
-                    {/*<Link className={classes.link} to={'/signup'}>Sign Up</Link>*/}
-                  {/*</Button>*/}
                 </div>
             }
           </Toolbar>
@@ -187,7 +204,7 @@ class ButtonAppBar extends React.Component {
               id="name"
               label="Exam Title"
               type="text"
-              error={dialogError}
+              error={showDialogError}
               value={this.state.examTitle}
               onChange={this.handleChange('examTitle')}
               fullWidth
@@ -208,12 +225,12 @@ class ButtonAppBar extends React.Component {
         </Dialog>
 
         {/*drawer*/}
-        <Drawer anchor="right" open={this.state.drawerOpen} onClose={this.toggleDrawer('right', false)}>
+        <Drawer anchor="right" open={this.state.drawerOpen} onClose={this.toggleDrawer('drawerOpen', false)}>
           <div
             tabIndex={0}
             role="button"
-            onClick={this.toggleDrawer('right', false)}
-            onKeyDown={this.toggleDrawer('right', false)}
+            onClick={this.toggleDrawer('drawerOpen', false)}
+            onKeyDown={this.toggleDrawer('drawerOpen', false)}
           >
             {sideList}
           </div>
@@ -301,5 +318,5 @@ const mapStateToProps = state => {
 };
 
 export default withStyles(styles)(
-  connect( mapStateToProps )(ButtonAppBar)
+  connect( mapStateToProps )(withRouter(ButtonAppBar))
 );

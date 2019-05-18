@@ -3,12 +3,12 @@ import React, {Component} from 'react';
 
 export const PrivateRoute = ({ component: Component, ...rest }) => {
 
-  const loggedIn = localStorage.getItem("token") !== 'undefined';
+  const token = localStorage.getItem("token");
   return (
     <Route
       {...rest}
       render={props =>
-        loggedIn ? (
+        token ? (
           <Component {...props} />
         ) : (
           <Redirect

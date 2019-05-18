@@ -1,7 +1,6 @@
-export const saveUser = (user, token) => ({
+export const saveUser = user => ({
   type: 'SAVE_USER',
-  user,
-  token
+  user
 });
 
 export const logout = () => ({

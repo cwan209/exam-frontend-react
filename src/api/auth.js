@@ -2,7 +2,7 @@ import * as config from '../config';
 import {getAuthToken} from "../helper/authHelper";
 
 export const signup = (email, password, username, roles) => {
-  const url = `${config.apiHost}v1/auth/signup`;
+  const url = `${config.apiHost}/v1/auth/signup`;
 
   return fetch(url,
     {
@@ -30,7 +30,7 @@ export const signup = (email, password, username, roles) => {
 };
 
 export const verifyAccount = (email, verificationToken) => {
-  const url = `${config.apiHost}v1/verify`;
+  const url = `${config.apiHost}/v1/verify`;
 
   return fetch(url,
     {
@@ -56,7 +56,7 @@ export const verifyAccount = (email, verificationToken) => {
 };
 
 export const login = (email, password, name) => {
-  const url = `${config.apiHost}v1/auth/signin`;
+  const url = `${config.apiHost}/v1/auth/signin`;
 
   return fetch(url,
     {
@@ -82,8 +82,7 @@ export const login = (email, password, name) => {
 };
 
 export const getCurrentUser = () => {
-  const url = `${config.apiHost}v1/auth/me`;
-  console.log(getAuthToken());
+  const url = `${config.apiHost}/v1/auth/me`;
 
   return fetch(url,
     {

@@ -8,17 +8,29 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Grid from '@material-ui/core/Grid';
+import {createNewExam, getExamById} from "../api/exam";
 
 
 class AddExam extends React.Component {
   state ={
     loading: false,
     type: '',
-    questions: []
+    questions: [],
+    exam: null
   };
 
   componentDidMount() {
+    const {examId} = this.props.location.state;
 
+    getExamById(examId).then(
+      response => {
+        if (response.exam) {
+          this.setState({exam: response.exam})
+        }
+      }
+    ).catch(error => {
+      console.error(error);
+    });
   }
 
   onClickAddQuestion = () => {
@@ -60,8 +72,8 @@ class AddExam extends React.Component {
       <form className={classes.container} noValidate autoComplete="off">
         {
           questions.map(
-            question =>
-              <p>Question</p>
+            (question, index) =>
+              <p key={index}>Question</p>
           )
         }
         <Grid
@@ -88,8 +100,8 @@ class AddExam extends React.Component {
               >
                 {
                   types.map(
-                    type =>
-                      <MenuItem value={type.value}>
+                    (type, index) =>
+                      <MenuItem key={index} value={type.value}>
                         <em>{type.name}</em>
                       </MenuItem>
                   )

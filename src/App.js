@@ -43,9 +43,7 @@ class App extends React.Component {
       <div className="App">
         <MuiThemeProvider theme={theme} >
           <Header/>
-
-          {/*<Router>*/}
-            <div>
+          {/*Router*/}
               <Route path={"/login"} render={(props) => (
                   <Login {...props} />
               )}/>
@@ -53,8 +51,7 @@ class App extends React.Component {
               <Route path={"/verify"} component={Verification}/>
               <PrivateRoute path={"/addExam"} component={AddExam}/>
               {/*<Route exact path={"/"} component={Home}/>*/}
-            </div>
-          {/*</Router>*/}
+          {/*Router*/}
 
           <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"/>
           <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
