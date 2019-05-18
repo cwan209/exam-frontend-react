@@ -29,6 +29,7 @@ import {connect} from "react-redux";
 import {logout} from "../actions/authActions";
 import {createNewExam} from "../api/exam";
 import { withRouter } from "react-router";
+import {showGlobalError} from "../actions/errorSnackBarActions";
 
 
 class ButtonAppBar extends React.Component {
@@ -70,6 +71,7 @@ class ButtonAppBar extends React.Component {
         }
       ).catch(error => {
         console.error(error);
+
       });
 
     }
@@ -128,8 +130,6 @@ class ButtonAppBar extends React.Component {
         </List>
       </div>
     );
-
-    console.log(loggedIn)
 
     return (
       <div className={classes.root}>

@@ -12,6 +12,7 @@ import {getCurrentUser} from "./api/auth";
 import {connect} from "react-redux";
 import {saveUser} from "./actions/authActions";
 import {PrivateRoute} from "./components/PrivateRouter";
+import ErrorSnackBar from './components/ErrorSnackBar';
 
 class App extends React.Component {
 
@@ -23,18 +24,25 @@ class App extends React.Component {
 
     this.setState({loading: true});
 
-    getCurrentUser().then(
-      response => {
-        this.setState({loading: false});
+    if (localStorage.getItem("token")) {
 
-        const {user} = response;
-        if (user) {
-          this.props.dispatch(saveUser(user));
-        } else {
+      getCurrentUser().then(
+        response => {
+          this.setState({loading: false});
 
+          const {user} = response;
+          if (user) {
+            this.props.dispatch(saveUser(user));
+          }
         }
-      }
-    )
+      ).catch(error => {
+        console.log(error);
+
+        //
+      })
+
+    }
+
   }
 
   render() {
@@ -43,18 +51,19 @@ class App extends React.Component {
       <div className="App">
         <MuiThemeProvider theme={theme} >
           <Header/>
-          {/*Router*/}
-              <Route path={"/login"} render={(props) => (
-                  <Login {...props} />
-              )}/>
-              <Route path={"/signup"} component={Signup}/>
-              <Route path={"/verify"} component={Verification}/>
-              <PrivateRoute path={"/addExam"} component={AddExam}/>
-              {/*<Route exact path={"/"} component={Home}/>*/}
-          {/*Router*/}
+
+          <Route path={"/login"} render={(props) => (
+              <Login {...props} />
+          )}/>
+          <Route path={"/signup"} component={Signup}/>
+          <Route path={"/verify"} component={Verification}/>
+          <PrivateRoute path={"/addExam"} component={AddExam}/>
+          {/*<Route exact path={"/"} component={Home}/>*/}
+          <ErrorSnackBar/>
 
           <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"/>
           <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+
         </MuiThemeProvider>
       </div>
     );

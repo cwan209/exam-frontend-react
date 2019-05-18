@@ -19,6 +19,7 @@ import { Redirect } from "react-router-dom";
 import { Link } from "react-router-dom";
 import {saveUser} from "../actions/authActions";
 import { connect } from 'react-redux';
+import {showGlobalError} from "../actions/errorSnackBarActions";
 
 class Login extends React.Component {
   state = {
@@ -64,11 +65,13 @@ class Login extends React.Component {
 
           this.setState({ redirectToReferrer: true });
         } else {
-          console.log('fail', response);
-          this.setState({
-            open: true,
-            errorMessage: 'Login Failed'
-          });
+          // console.log('fail', response);
+          this.props.dispatch(showGlobalError("Login Failed"))
+
+          // this.setState({
+          //   open: true,
+          //   errorMessage: ''
+          // });
         }
       }
     );
@@ -142,26 +145,26 @@ class Login extends React.Component {
             <Link className={classes.link} to={'/signup'}>Sign Up</Link>
           </Button>
 
-          <Snackbar
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'center',
-            }}
-            open={open}
-            autoHideDuration={6000}
-            onClose={this.handleClose}
-            ContentProps={{
-              'aria-describedby': 'message-id',
-            }}
-            message={
-              <span id="message-id">{errorMessage}</span>
-            }
-            action={[
-              <Button key="okay" color="secondary" size="small" onClick={this.handleClose}>
-                Okay
-              </Button>,
-            ]}
-          />
+          {/*<Snackbar*/}
+            {/*anchorOrigin={{*/}
+              {/*vertical: 'bottom',*/}
+              {/*horizontal: 'center',*/}
+            {/*}}*/}
+            {/*open={open}*/}
+            {/*autoHideDuration={6000}*/}
+            {/*onClose={this.handleClose}*/}
+            {/*ContentProps={{*/}
+              {/*'aria-describedby': 'message-id',*/}
+            {/*}}*/}
+            {/*message={*/}
+              {/*<span id="message-id">{errorMessage}</span>*/}
+            {/*}*/}
+            {/*action={[*/}
+              {/*<Button key="okay" color="secondary" size="small" onClick={this.handleClose}>*/}
+                {/*Okay*/}
+              {/*</Button>,*/}
+            {/*]}*/}
+          {/*/>*/}
         </Paper>
 
       </form>
