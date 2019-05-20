@@ -40,6 +40,24 @@ export const getExamById = id => {
     });
 };
 
+export const getExams = () => {
+  const url = `${config.apiHost}/v1/exams`;
+
+  return fetch(url,
+    {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getAuthToken()
+      }
+    })
+    .then(response => response.json())
+    .then(response => {
+      console.log('getExams', response);
+      return response;
+    });
+};
+
 export const addTrueOrFalse = examId => {
   const url = `${config.apiHost}/v1/exams/${examId}/trueOrFalse`;
 

@@ -1,29 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import AddIcon from '@material-ui/icons/Add';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Grid from '@material-ui/core/Grid';
-import {getExamById, addTrueOrFalse, addMultipleChoice} from "../api/exam";
-import TrueOrFalseEditor from '../components/editors/TrueOrFalseEditor';
-import MultipleChoiceEditor from '../components/editors/MultipleChoiceEditor';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Typography from '@material-ui/core/Typography';
+import {getExams} from "../api/exam";
 
 class ExamList extends React.Component {
   state ={
     loading: false,
-    type: '',
-    title: '',
-    questions: [],
+    exams: []
   };
 
   componentDidMount() {
+    this.setState({loading: true});
+    getExams().then(
+      exams => {
+        this.setState({
+          loading: false,
+          exams: exams
+        });
 
+      }
+    ).catch(
+      error => {
+        this.setState({loading: false});
+
+        console.log(error);
+      }
+    )
   }
 
   handleChange = prop => event => {
@@ -32,7 +35,7 @@ class ExamList extends React.Component {
 
   render() {
     const {classes} = this.props;
-    const {exmas, loading} = this.state;
+    const {exams, loading} = this.state;
 
     return (
       loading
@@ -40,7 +43,12 @@ class ExamList extends React.Component {
       <LinearProgress color={"secondary"} />
         :
       <div className={classes.container}>
-        Haha
+        {
+          exams.map(
+            exam =>
+              <p>{exam.title}</p>
+          )
+        }
 
       </div>
     )
