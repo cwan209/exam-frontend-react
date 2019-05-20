@@ -8,7 +8,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Grid from '@material-ui/core/Grid';
-import {getExamById} from "../api/exam";
+import {getExamById, addTrueOrFalse, addMultipleChoice} from "../api/exam";
+import TrueOrFalseEditor from '../components/editors/TrueOrFalseEditor';
+import MultipleChoiceEditor from '../components/editors/MultipleChoiceEditor';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 
@@ -17,7 +19,7 @@ class AddExam extends React.Component {
     loading: false,
     type: '',
     title: '',
-    questions: []
+    questions: [],
   };
 
   componentDidMount() {
@@ -46,23 +48,72 @@ class AddExam extends React.Component {
 
   onClickAddQuestion = () => {
     const {type} = this.state;
+    const {examId} = this.props.location.state;
 
     if(!type) {
       alert('Please choose type');
       return;
     }
 
-    this.setState({
-      questions: [...this.state.questions, {}]
-    });
+    switch (type) {
+
+      case 'mc':
+        addMultipleChoice(examId).then(
+          response => {
+            if (response.question) {
+              this.setState({
+                questions: [...this.state.questions, response.question]
+              });
+            }
+          }
+        ).catch(
+          error => {
+            console.log(error);
+          }
+        );
+        break;
+
+      case 'tf':
+        addTrueOrFalse(examId).then(
+          response => {
+            if (response.question) {
+              this.setState({
+                questions: [...this.state.questions, response.question]
+              });
+            }
+          }
+        ).catch(
+          error => {
+            console.log(error);
+          }
+        );
+        break;
+
+      default:
+
+    }
   };
 
   handleChange = prop => event => {
     this.setState({[prop]: event.target.value});
   };
 
-  renderQuestoin = type => {
+  renderQuestion = (question, index) => {
+    const {examId} = this.props.location.state;
 
+    switch (question.type) {
+
+      case 'mc':
+        return <MultipleChoiceEditor question={question} key={index} examId={examId}/>;
+
+
+      case 'tf':
+        return <TrueOrFalseEditor question={question} key={index} examId={examId}/>;
+
+
+      default:
+
+    }
   };
 
   render() {
@@ -90,8 +141,9 @@ class AddExam extends React.Component {
         </Typography>
         {
           questions.map(
-            (question, index) =>
-              <p key={index}>Question</p>
+            (question, index) => {
+              return this.renderQuestion(question, index)
+            }
           )
         }
 

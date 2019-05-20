@@ -19,25 +19,19 @@ class MultipleChoiceEditor extends React.Component {
   };
 
   render() {
-    const {classes} = this.props;
+    const {classes, question} = this.props;
 
     return (
-      <form autoComplete="off" >
-
-        {/*Question Type*/}
         <div className={classes.questionType}>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="demo-controlled-open-select">Question Type</InputLabel>
-          </FormControl>
+          <p>{question.content}</p>
         </div>
-
-      </form>
     )
   }
 }
 
 MultipleChoiceEditor.propTypes = {
   classes: PropTypes.object.isRequired,
+  question: PropTypes.object.isRequired,
 };
 
 const styles = theme => ({

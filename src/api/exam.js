@@ -39,3 +39,64 @@ export const getExamById = id => {
       return response;
     });
 };
+
+export const addTrueOrFalse = examId => {
+  const url = `${config.apiHost}/v1/exams/${examId}/trueOrFalse`;
+
+  return fetch(url,
+    {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getAuthToken()
+      }
+    })
+    .then(response => response.json())
+    .then(response => {
+      console.log('addTrueOrFalse', response);
+      return response;
+    });
+};
+
+export const updateTrueOrFalse = (examId, question) => {
+  const url = `${config.apiHost}/v1/exams/${examId}/trueOrFalse`;
+
+  console.log(question);
+  return fetch(url,
+    {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getAuthToken()
+      },
+      body: JSON.stringify({
+        content: question.content,
+        id: question.id,
+        answer: question.answer
+      })
+    })
+    .then(response => response.json())
+    .then(response => {
+      console.log('updateTrueOrFalse', response);
+      return response;
+    });
+};
+
+
+export const addMultipleChoice = examId => {
+  const url = `${config.apiHost}/v1/exams/${examId}/multipleChoice`;
+
+  return fetch(url,
+    {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getAuthToken()
+      }
+    })
+    .then(response => response.json())
+    .then(response => {
+      console.log('addMultipleChoice', response);
+      return response;
+    });
+};

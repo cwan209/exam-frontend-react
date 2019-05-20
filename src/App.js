@@ -7,7 +7,7 @@ import Login from './pages/Login';
 import {MuiThemeProvider} from '@material-ui/core/styles';
 import {theme} from './settings/theme';
 import Verification from "./pages/Verification";
-import AddExam from "./pages/AddExam";
+import AddExam from "./pages/ExamEditor";
 import {getCurrentUser} from "./api/auth";
 import {connect} from "react-redux";
 import {saveUser} from "./actions/authActions";
@@ -40,6 +40,7 @@ class App extends React.Component {
       ).catch(error => {
         console.log(error);
         this.props.dispatch(showGlobalError("Invalid token, please login again"));
+        this.props.history.push('/login');
       })
 
     }
