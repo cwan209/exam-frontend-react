@@ -16,6 +16,7 @@ import Drawer from '@material-ui/core/Drawer';
 import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import CallMissedOutgoing from '@material-ui/icons/CallMissedOutgoing';
@@ -98,6 +99,14 @@ class ButtonAppBar extends React.Component {
     });
   };
 
+  onClickExams = () => {
+    const {history} = this.props;
+
+    history.push({
+      pathname: '/exams'
+    })
+  };
+
   onClickLogout = () => {
     const {history} = this.props;
 
@@ -105,7 +114,6 @@ class ButtonAppBar extends React.Component {
     history.push({
       pathname: '/'
     })
-
   };
 
   handleDialogClose = () => {
@@ -136,19 +144,17 @@ class ButtonAppBar extends React.Component {
 
     const sideList = (
       <div className={classes.list}>
-        {/*<List>*/}
-          {/*{['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (*/}
-            {/*<ListItem button key={text}>*/}
-              {/*<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>*/}
-              {/*<ListItemText primary={text} />*/}
-            {/*</ListItem>*/}
-          {/*))}*/}
-        {/*</List>*/}
+        <List>
+            <ListItem button key={'exams'} onClick={this.onClickExams}>
+              <ListItemIcon><LibraryBooksIcon/></ListItemIcon>
+              <ListItemText primary={"My Exams"} />
+            </ListItem>
+        </List>
         <Divider />
         <List>
             <ListItem button key={"logout"} onClick={this.onClickLogout}>
               <ListItemIcon><CallMissedOutgoing/></ListItemIcon>
-              <ListItemText primary={"logout"} />
+              <ListItemText primary={"Log Out"} />
             </ListItem>
         </List>
       </div>

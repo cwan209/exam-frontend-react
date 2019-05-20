@@ -14,6 +14,7 @@ import {saveUser} from "./actions/authActions";
 import {PrivateRoute} from "./components/PrivateRouter";
 import ErrorSnackBar from './components/ErrorSnackBar';
 import {showGlobalError} from "./actions/errorSnackBarActions";
+import ExamList from "./pages/ExamList";
 
 
 class App extends React.Component {
@@ -60,6 +61,7 @@ class App extends React.Component {
           <Route path={"/signup"} component={Signup}/>
           <Route path={"/verify"} component={Verification}/>
           <PrivateRoute path={"/addExam"} component={AddExam}/>
+          <PrivateRoute path={"/exams"} component={ExamList}/>
           {/*<Route exact path={"/"} component={Home}/>*/}
           <ErrorSnackBar/>
 
