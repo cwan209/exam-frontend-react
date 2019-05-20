@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import {getExams} from "../api/exam";
+import ExamCard from "../components/ExamCard";
 
 class ExamList extends React.Component {
   state ={
@@ -29,10 +30,6 @@ class ExamList extends React.Component {
     )
   }
 
-  handleChange = prop => event => {
-    this.setState({[prop]: event.target.value});
-  };
-
   render() {
     const {classes} = this.props;
     const {exams, loading} = this.state;
@@ -46,10 +43,9 @@ class ExamList extends React.Component {
         {
           exams.map(
             exam =>
-              <p>{exam.title}</p>
+            <ExamCard exam={exam}/>
           )
         }
-
       </div>
     )
   }
