@@ -5,12 +5,16 @@ import FormControl from '@material-ui/core/FormControl';
 import {updateMultipleChoice} from "../../api/exam";
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
-var _ = require('lodash');
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+const _ = require('lodash');
 
 
 class MultipleChoiceEditor extends React.Component {
@@ -43,7 +47,7 @@ class MultipleChoiceEditor extends React.Component {
   };
 
   handleChangeOption = index => event => {
-    console.log(index,event.target.value)
+    console.log('handleChangeOption', index,event.target.value)
 
     const newOptions = _.cloneDeep(this.state.question.options);
     newOptions[index].content = event.target.value;
@@ -55,6 +59,47 @@ class MultipleChoiceEditor extends React.Component {
       }
     })
 
+  };
+
+
+  onAnswerChange = prop => event => {
+
+    const answer = parseInt(event.target.value);
+    console.log('answer', answer)
+
+    this.setState({
+      question: {
+        ...this.state.question,
+        answer: answer
+      }
+    }, this.onContentChange);
+
+  };
+
+  onClickAddOption = () => {
+    this.setState({
+      question: {
+        ...this.state.question,
+        options: [...this.state.question.options, {content: ''}]
+      }
+    }, this.onContentChange);
+  };
+
+
+  onClickRemoveOption = index => {
+    console.log('onClickRemoveOption', index)
+
+    const newOptions = _.cloneDeep(this.state.question.options);
+    newOptions.splice(index, 1);
+
+    console.log(newOptions)
+
+    this.setState({
+      question: {
+        ...this.state.question,
+        options: newOptions
+      }
+    }, this.onContentChange);
   };
 
   onContentChange = () => {
@@ -76,26 +121,10 @@ class MultipleChoiceEditor extends React.Component {
     )
   };
 
-  onAnswerChange = prop => event => {
-
-    const answer = parseInt(event.target.value);
-    console.log('answer', answer)
-
-    this.setState({
-      question: {
-        ...this.state.question,
-        answer: answer
-      }
-    }, this.onContentChange);
-
-  };
-
 
   render() {
     const {classes} = this.props;
     const {content, answer, options} = this.state.question;
-
-    console.log(this.state.question)
 
     return (
       <Paper className={classes.root} elevation={1}>
@@ -120,21 +149,48 @@ class MultipleChoiceEditor extends React.Component {
           {
             options.map(
               (option, index) =>
-                <TextField
-                  id="outlined-name"
-                  label="option"
-                  className={classes.option}
-                  value={option.content}
-                  onChange={this.handleChangeOption(index)}
-                  margin="normal"
-                  variant="outlined"
-                  onBlur={this.onContentChange}
-                  fullWidth
-                  multiline
-                  rows={2}
-                />
+                <Grid
+                  container
+                  direction="row"
+                  justify="space-between"
+                  alignItems="center"
+                  className={classes.optionWrapper}
+                >
+                  <TextField
+                    id="outlined-name"
+                    label="option"
+                    className={classes.option}
+                    value={option.content}
+                    onChange={this.handleChangeOption(index)}
+                    margin="normal"
+                    variant="outlined"
+                    onBlur={this.onContentChange}
+                    multiline
+                    rows={2}
+                  />
+
+                  <IconButton
+                    aria-haspopup="true"
+                    onClick={() => this.onClickRemoveOption(index)}
+                    color="secondary"
+                    className={classes.remove}
+                  >
+                    <RemoveCircleIcon/>
+                  </IconButton>
+
+                </Grid>
             )
           }
+
+          <IconButton
+            aria-haspopup="true"
+            onClick={this.onClickAddOption}
+            color="inherit"
+            className={classes.add}
+          >
+            <AddIcon/>
+          </IconButton>
+
           {
             options.length > 1 &&
             <div>
@@ -144,12 +200,12 @@ class MultipleChoiceEditor extends React.Component {
               name="Answer"
               className={classes.group}
               value={answer}
-              onChange={this.onAnswerChange('answer')}
+              onChange={this.onAnswerChange("answer")}
               >
                 {
                   options.map(
                   (option, index) =>
-                  <FormControlLabel value={index} control={<Radio />} label={option.content} />
+                    <FormControlLabel value={index} control={<Radio />} label={option.content} key={index} />
                   )
                 }
               </RadioGroup>
@@ -183,7 +239,9 @@ const styles = theme => ({
     marginTop: 20
   },
   option: {
-
+    width: "90%"
+  },
+  optionWrapper: {
   }
 });
 
