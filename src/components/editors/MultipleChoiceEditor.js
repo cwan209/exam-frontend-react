@@ -78,13 +78,13 @@ class MultipleChoiceEditor extends React.Component {
 
   onAnswerChange = prop => event => {
 
-    const answer = event.target.value;
+    const answer = parseInt(event.target.value);
     console.log('answer', answer)
 
     this.setState({
       question: {
         ...this.state.question,
-        answer: answer === "true"
+        answer: answer
       }
     }, this.onContentChange);
 
@@ -133,7 +133,6 @@ class MultipleChoiceEditor extends React.Component {
                   multiline
                   rows={2}
                 />
-
             )
           }
 
@@ -143,11 +142,15 @@ class MultipleChoiceEditor extends React.Component {
             aria-label="Answer"
             name="Answer"
             className={classes.group}
-            value={answer ? "true" : "false"}
+            value={answer}
             onChange={this.onAnswerChange('answer')}
           >
-            <FormControlLabel value={"true"} control={<Radio />} label="True" />
-            <FormControlLabel value={"false"} control={<Radio />} label="False" />
+            {
+              options.map(
+                (option, index) =>
+                  <FormControlLabel value={index} control={<Radio />} label={option.content} />
+              )
+            }
           </RadioGroup>
         </FormControl>
       </Paper>

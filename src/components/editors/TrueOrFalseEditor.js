@@ -73,7 +73,7 @@ class TrueOrFalseEditor extends React.Component {
     const {classes} = this.props;
     const {content, answer} = this.state.question;
 
-    console.log(this.state.question)
+    // console.log(this.state.question)
 
     return (
       <Paper className={classes.root} elevation={1}>
