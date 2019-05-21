@@ -135,23 +135,26 @@ class MultipleChoiceEditor extends React.Component {
                 />
             )
           }
-
-
-          <FormLabel component="legend">Please provide the correct answer</FormLabel>
-          <RadioGroup
-            aria-label="Answer"
-            name="Answer"
-            className={classes.group}
-            value={answer}
-            onChange={this.onAnswerChange('answer')}
-          >
-            {
-              options.map(
-                (option, index) =>
+          {
+            options.length > 1 &&
+            <div>
+              <FormLabel component="legend">Please provide the correct answer</FormLabel>
+              <RadioGroup
+              aria-label="Answer"
+              name="Answer"
+              className={classes.group}
+              value={answer}
+              onChange={this.onAnswerChange('answer')}
+              >
+                {
+                  options.map(
+                  (option, index) =>
                   <FormControlLabel value={index} control={<Radio />} label={option.content} />
-              )
-            }
-          </RadioGroup>
+                  )
+                }
+              </RadioGroup>
+            </div>
+          }
         </FormControl>
       </Paper>
     )
