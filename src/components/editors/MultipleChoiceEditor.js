@@ -13,6 +13,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
+import ClearIcon from '@material-ui/icons/Clear';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 const _ = require('lodash');
 
@@ -123,14 +124,33 @@ class MultipleChoiceEditor extends React.Component {
 
 
   render() {
-    const {classes} = this.props;
+    const {classes, deleteQuestion} = this.props;
     const {content, answer, options} = this.state.question;
 
     return (
       <Paper className={classes.root} elevation={1}>
-        <Typography variant="subtitle1" gutterBottom className={classes.questionType}>
-          Multiple Choice
-        </Typography>
+
+        <Grid
+          container
+          direction="row"
+          justify="space-between"
+          alignItems="center"
+          className={classes.titleWrapper}
+        >
+          <Typography variant="subtitle1" gutterBottom className={classes.questionType}>
+            Multiple Choice
+          </Typography>
+
+          <IconButton
+            aria-haspopup="true"
+            onClick={() => deleteQuestion(this.state.question, this.props.index)}
+            color="secondary"
+            className={classes.clear}
+          >
+            <ClearIcon/>
+          </IconButton>
+
+        </Grid>
         <TextField
           id="outlined-name"
           label="Question"
@@ -185,7 +205,7 @@ class MultipleChoiceEditor extends React.Component {
           <IconButton
             aria-haspopup="true"
             onClick={this.onClickAddOption}
-            color="inherit"
+            color="primary"
             className={classes.add}
           >
             <AddIcon/>
@@ -194,7 +214,7 @@ class MultipleChoiceEditor extends React.Component {
           {
             options.length > 1 &&
             <div>
-              <FormLabel component="legend">Please provide the correct answer</FormLabel>
+              <FormLabel component="legend" className={classes.answerLabel}>Please provide the correct answer</FormLabel>
               <RadioGroup
               aria-label="Answer"
               name="Answer"
@@ -242,6 +262,13 @@ const styles = theme => ({
     width: "90%"
   },
   optionWrapper: {
+  },
+  answerLabel: {
+    marginTop: 20,
+    marginBottom: 10
+  },
+  titleWrapper: {
+
   }
 });
 

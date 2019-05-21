@@ -104,16 +104,23 @@ class AddExam extends React.Component {
     switch (question.type) {
 
       case 'mc':
-        return <MultipleChoiceEditor question={question} key={index} examId={examId}/>;
+        return <MultipleChoiceEditor question={question} key={index} examId={examId} deleteQuestion={this.deleteQuestion} index={index}/>;
 
 
       case 'tf':
-        return <TrueOrFalseEditor question={question} key={index} examId={examId}/>;
+        return <TrueOrFalseEditor question={question} key={index} examId={examId} deleteQuestion={this.deleteQuestion} index={index}/>;
 
 
       default:
 
     }
+  };
+
+  deleteQuestion = (question, index) => {
+    console.log( 'deleteQuestion', question, index);
+
+
+
   };
 
   render() {
