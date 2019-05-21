@@ -31,9 +31,6 @@ class TrueOrFalseEditor extends React.Component {
   }
 
   handleChange = prop => event => {
-    console.log("handleChange", prop);
-    this.setState({[prop]: event.target.value});
-
     this.setState({
       question: {
         ...this.state.question,
@@ -43,11 +40,7 @@ class TrueOrFalseEditor extends React.Component {
   };
 
   onContentChange = () => {
-    const {question} = this.state;
-    const {examId} = this.props;
-
-
-    updateTrueOrFalse(examId, question).then(
+    updateTrueOrFalse(this.props.examId, this.state.question).then(
       response => {
         const {question} = response;
         if (question) {
@@ -61,41 +54,18 @@ class TrueOrFalseEditor extends React.Component {
         console.log(error);
       }
     )
-
   };
 
   onAnswerChange = prop => event => {
-    const {question} = this.state;
-    const {examId} = this.props;
 
     const answer = event.target.value;
-    console.log('answer', answer)
 
     this.setState({
       question: {
         ...this.state.question,
         answer: answer === "true"
       }
-    }, () => {
-
-      updateTrueOrFalse(examId, this.state.question).then(
-        response => {
-          const {question} = response;
-          if (question) {
-            this.setState({
-              question: question
-            })
-          }
-        }
-      ).catch(
-        error => {
-          console.log(error);
-        }
-      )
-
-    });
-
-
+    }, this.onContentChange);
   };
 
 

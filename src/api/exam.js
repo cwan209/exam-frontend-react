@@ -118,3 +118,24 @@ export const addMultipleChoice = examId => {
       return response;
     });
 };
+
+export const updateMultipleChoice = (examId, question) => {
+  const url = `${config.apiHost}/v1/exams/${examId}/multipleChoice`;
+
+  console.log(question);
+  return fetch(url,
+    {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getAuthToken()
+      },
+      body: JSON.stringify(question)
+    })
+    .then(response => response.json())
+    .then(response => {
+      console.log('updateMultipleChoice', response);
+      return response;
+    });
+};
+
