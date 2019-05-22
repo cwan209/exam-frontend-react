@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
-import {updateMultipleChoice} from "../../api/exam";
+import {updateMultipleChoice, deleteMultipleChoice} from "../../api/exam";
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -61,7 +61,6 @@ class MultipleChoiceEditor extends React.Component {
     })
 
   };
-
 
   onAnswerChange = prop => event => {
 
@@ -122,9 +121,20 @@ class MultipleChoiceEditor extends React.Component {
     )
   };
 
+  deleteQuestion = () => {
+    deleteMultipleChoice(this.props.examId, this.state.question).then(
+      response => {
+        this.props.deleteQuestion(this.props.index);
+      }
+    ).catch(
+      error => {
+        console.log(error);
+      }
+    )
+  };
 
   render() {
-    const {classes, deleteQuestion} = this.props;
+    const {classes} = this.props;
     const {content, answer, options} = this.state.question;
 
     return (
@@ -143,7 +153,7 @@ class MultipleChoiceEditor extends React.Component {
 
           <IconButton
             aria-haspopup="true"
-            onClick={() => deleteQuestion(this.state.question, this.props.index)}
+            onClick={this.deleteQuestion}
             color="secondary"
             className={classes.clear}
           >

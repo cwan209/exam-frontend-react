@@ -13,6 +13,7 @@ import TrueOrFalseEditor from '../components/editors/TrueOrFalseEditor';
 import MultipleChoiceEditor from '../components/editors/MultipleChoiceEditor';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
+const _ = require('lodash');
 
 class AddExam extends React.Component {
   state ={
@@ -102,24 +103,37 @@ class AddExam extends React.Component {
     const {examId} = this.props.location.state;
 
     switch (question.type) {
-
       case 'mc':
-        return <MultipleChoiceEditor question={question} key={index} examId={examId} deleteQuestion={this.deleteQuestion} index={index}/>;
-
-
+        return <MultipleChoiceEditor
+                  question={question}
+                  key={question.id}
+                  examId={examId}
+                  deleteQuestion={this.deleteQuestion}
+                  index={index}
+                />;
       case 'tf':
-        return <TrueOrFalseEditor question={question} key={index} examId={examId} deleteQuestion={this.deleteQuestion} index={index}/>;
-
-
+        return <TrueOrFalseEditor
+                  question={question}
+                  key={question.id}
+                  examId={examId}
+                  deleteQuestion={this.deleteQuestion}
+                  index={index}
+                />;
       default:
-
     }
   };
 
-  deleteQuestion = (question, index) => {
-    console.log( 'deleteQuestion', question, index);
+  deleteQuestion = index => {
+    const newQuestions = _.cloneDeep(this.state.questions);
+    newQuestions.splice(index, 1);
 
+    console.log('deleteQuestion', index, newQuestions);
 
+    this.setState({
+      questions: newQuestions
+    }, () => {
+      console.log('questions', this.state.questions)
+    })
 
   };
 
@@ -135,7 +149,7 @@ class AddExam extends React.Component {
       {name: 'Short Answer', value: 'sa'},
       {name: 'Essay', value: 'e'}
     ];
-    console.log('questions', questions);
+    // console.log('questions', questions);
 
     return (
       loading

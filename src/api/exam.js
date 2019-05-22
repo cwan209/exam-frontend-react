@@ -139,3 +139,43 @@ export const updateMultipleChoice = (examId, question) => {
     });
 };
 
+export const deleteMultipleChoice = (examId, question) => {
+  const url = `${config.apiHost}/v1/exams/${examId}/multipleChoice`;
+
+  console.log(question);
+  return fetch(url,
+    {
+      method: 'delete',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getAuthToken()
+      },
+      body: JSON.stringify(question)
+    })
+    .then(response => response.json())
+    .then(response => {
+      console.log('deleteMultipleChoice', response);
+      return response;
+    });
+};
+
+export const deleteTrueOrFalse = (examId, question) => {
+  const url = `${config.apiHost}/v1/exams/${examId}/trueOrFalse`;
+
+  console.log(question);
+  return fetch(url,
+    {
+      method: 'delete',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getAuthToken()
+      },
+      body: JSON.stringify(question)
+    })
+    .then(response => response.json())
+    .then(response => {
+      console.log('deleteTrueOrFalse', response);
+      return response;
+    });
+};
+

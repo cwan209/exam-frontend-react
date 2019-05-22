@@ -4,12 +4,15 @@ import {withStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import {updateTrueOrFalse} from "../../api/exam";
+import {deleteTrueOrFalse, updateTrueOrFalse} from "../../api/exam";
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import ClearIcon from '@material-ui/icons/Clear';
 
 class TrueOrFalseEditor extends React.Component {
   state = {
@@ -68,6 +71,17 @@ class TrueOrFalseEditor extends React.Component {
     }, this.onContentChange);
   };
 
+  deleteQuestion = () => {
+    deleteTrueOrFalse(this.props.examId, this.state.question).then(
+      response => {
+        this.props.deleteQuestion(this.props.index);
+      }
+    ).catch(
+      error => {
+        console.log(error);
+      }
+    )
+  };
 
   render() {
     const {classes} = this.props;
@@ -77,9 +91,28 @@ class TrueOrFalseEditor extends React.Component {
 
     return (
       <Paper className={classes.root} elevation={1}>
-        <Typography variant="subtitle1" gutterBottom className={classes.questionType}>
-          True Or False
-        </Typography>
+        <Grid
+          container
+          direction="row"
+          justify="space-between"
+          alignItems="center"
+          className={classes.titleWrapper}
+        >
+          <Typography variant="subtitle1" gutterBottom className={classes.questionType}>
+            True Or False
+          </Typography>
+
+          <IconButton
+            aria-haspopup="true"
+            onClick={this.deleteQuestion}
+            color="secondary"
+            className={classes.clear}
+          >
+            <ClearIcon/>
+          </IconButton>
+
+        </Grid>
+
         <TextField
           id="outlined-name"
           label="Question"
