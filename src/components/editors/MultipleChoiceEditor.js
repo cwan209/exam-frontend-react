@@ -15,6 +15,8 @@ import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import ClearIcon from '@material-ui/icons/Clear';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import {showLesserSnackBarError, showLesserSnackBarSuccess} from "../../actions/lesserSnackBarActions";
+import {connect} from "react-redux";
 const _ = require('lodash');
 
 
@@ -87,12 +89,8 @@ class MultipleChoiceEditor extends React.Component {
 
 
   onClickRemoveOption = index => {
-    console.log('onClickRemoveOption', index)
-
     const newOptions = _.cloneDeep(this.state.question.options);
     newOptions.splice(index, 1);
-
-    console.log(newOptions)
 
     this.setState({
       question: {
@@ -103,8 +101,6 @@ class MultipleChoiceEditor extends React.Component {
   };
 
   onContentChange = () => {
-    console.log(this.state.question);
-
     updateMultipleChoice(this.props.examId, this.state.question).then(
       response => {
         const {question} = response;
@@ -113,9 +109,12 @@ class MultipleChoiceEditor extends React.Component {
             question: question
           })
         }
+        this.props.dispatch(showLesserSnackBarSuccess('Success'));
+
       }
     ).catch(
       error => {
+        this.props.dispatch(showLesserSnackBarError('Failed'));
         console.log(error);
       }
     )
@@ -125,9 +124,12 @@ class MultipleChoiceEditor extends React.Component {
     deleteMultipleChoice(this.props.examId, this.state.question).then(
       response => {
         this.props.deleteQuestion(this.props.index);
+        this.props.dispatch(showLesserSnackBarSuccess('Success'));
+
       }
     ).catch(
       error => {
+        this.props.dispatch(showLesserSnackBarError('Failed'));
         console.log(error);
       }
     )
@@ -177,7 +179,7 @@ class MultipleChoiceEditor extends React.Component {
         <FormControl component="fieldset" className={classes.formControl}>
           <FormLabel component="legend">Please provide your options</FormLabel>
           {
-            options.map(
+            options && options.map(
               (option, index) =>
                 <Grid
                   container
@@ -222,7 +224,7 @@ class MultipleChoiceEditor extends React.Component {
           </IconButton>
 
           {
-            options.length > 1 &&
+           options && options.length > 1 &&
             <div>
               <FormLabel component="legend" className={classes.answerLabel}>Please provide the correct answer</FormLabel>
               <RadioGroup
@@ -282,5 +284,12 @@ const styles = theme => ({
   }
 });
 
+const mapStateToProps = state => {
+  return {
 
-export default withStyles(styles)(MultipleChoiceEditor);
+  }
+};
+
+export default withStyles(styles)(
+  connect( mapStateToProps )(MultipleChoiceEditor)
+);

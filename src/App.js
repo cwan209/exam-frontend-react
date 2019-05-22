@@ -13,6 +13,7 @@ import {connect} from "react-redux";
 import {saveUser} from "./actions/authActions";
 import {PrivateRoute} from "./components/PrivateRouter";
 import ErrorSnackBar from './components/ErrorSnackBar';
+import LesserSnackBar from './components/LesserSnackBar';
 import {showGlobalError} from "./actions/errorSnackBarActions";
 import ExamList from "./pages/ExamList";
 
@@ -64,6 +65,7 @@ class App extends React.Component {
           <PrivateRoute path={"/exams"} component={ExamList}/>
           {/*<Route exact path={"/"} component={Home}/>*/}
           <ErrorSnackBar/>
+          <LesserSnackBar/>
 
           <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"/>
           <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>

@@ -13,6 +13,8 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
+import {connect} from "react-redux";
+import { showLesserSnackBarError, showLesserSnackBarSuccess } from "../../actions/lesserSnackBarActions";
 
 class TrueOrFalseEditor extends React.Component {
   state = {
@@ -51,9 +53,11 @@ class TrueOrFalseEditor extends React.Component {
             question: question
           })
         }
+        this.props.dispatch(showLesserSnackBarSuccess('Success!'))
       }
     ).catch(
       error => {
+        this.props.dispatch(showLesserSnackBarError('Failed!'));
         console.log(error);
       }
     )
@@ -75,9 +79,12 @@ class TrueOrFalseEditor extends React.Component {
     deleteTrueOrFalse(this.props.examId, this.state.question).then(
       response => {
         this.props.deleteQuestion(this.props.index);
+        this.props.dispatch(showLesserSnackBarSuccess('Success!'));
       }
-    ).catch(
+  ).catch(
       error => {
+        this.props.dispatch(showLesserSnackBarError('Failed!'));
+
         console.log(error);
       }
     )
@@ -86,8 +93,6 @@ class TrueOrFalseEditor extends React.Component {
   render() {
     const {classes} = this.props;
     const {content, answer} = this.state.question;
-
-    // console.log(this.state.question)
 
     return (
       <Paper className={classes.root} elevation={1}>
@@ -166,5 +171,12 @@ const styles = theme => ({
   }
 });
 
+const mapStateToProps = state => {
+  return {
 
-export default withStyles(styles)(TrueOrFalseEditor);
+  }
+};
+
+export default withStyles(styles)(
+  connect( mapStateToProps )(TrueOrFalseEditor)
+);
